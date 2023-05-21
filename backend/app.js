@@ -49,6 +49,21 @@ app.get('/', function(req, res) {
 
 });
 
+// Add Person (Testeando las requests con esta onda)
+app.post('/person/add', function(req, res) {
+    var name = req.body.name;
+    session
+        .run('CREATE (n:Person {name: $nameParam}) RETURN n.name', {nameParam: name})
+        .then(function(result) {
+            res.redirect('/');
+            session.close();
+        })
+
+        .catch(function(err) {
+            console.log(err);
+        });
+});
+
 app.listen(3000); // Start server
 console.log("Server started on port 3000");
 
