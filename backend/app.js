@@ -2,7 +2,7 @@ var express = require('express');
 var path = require('path');
 var logger = require('morgan');
 var bodyParser = require('body-parser');
-var neo4j = require('neo4j-driver').v1; 
+var neo4j = require('neo4j-driver'); 
 const dotenv = require('dotenv');
 dotenv.config(); // Load environment variables from .env file
 
@@ -21,16 +21,32 @@ app.use(express.static(path.join(__dirname, 'public'))); // Set public folder
 const neo4j_user = process.env.NEO4J_USER;
 const neo4j_pass = process.env.NEO4J_PASS;
 
-// Connect to Neo4j with uri neo4j+s scheme
-const driver = neo4j.driver('http://f6664da5.databases.neo4j.io', neo4j.auth.basic(neo4j_user, neo4j_pass));
+
+
+const driver = neo4j.driver('bolt://127.0.0.1:7687', neo4j.auth.basic(neo4j_user, neo4j_pass));
 const session = driver.session()
+
 
 app.get('/', function(req, res) {
 
-    session.run('MATCH (n:Person) RETURN n LIMIT 25');
-
-
+    session
+        .run('MATCH (n:Person) RETURN n LIMIT 25')
+        .then(function(result) {
+            var personArr = [];
+            result.records.forEach(function(record) {
+                personArr.push({
+                    id: record._fields[0].identity.low,
+                    name: record._fields[0].properties.name
+                });
+            });
+            console.log(personArr);
+        })
+        .catch(function(err) {
+            console.log(err);
+        });
+        
     res.send('Hi Mom!');
+
 });
 
 app.listen(3000); // Start server
