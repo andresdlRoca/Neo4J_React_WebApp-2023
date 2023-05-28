@@ -1,0 +1,190 @@
+// Generate Person - User Nodes
+CREATE (:PERSON:USER {name: "User1", age: 26, email: "user1@example.com", has_family: true, has_pets: true, sedentary: "no", allergic: false})
+CREATE (:PERSON:USER {name: "User2", age: 27, email: "user2@example.com", has_family: false, has_pets: true, sedentary: "yes", allergic: true})
+CREATE (:PERSON:USER {name: "User3", age: 28, email: "user3@example.com", has_family: true, has_pets: false, sedentary: "no", allergic: false})
+CREATE (:PERSON:USER {name: "User4", age: 29, email: "user4@example.com", has_family: true, has_pets: true, sedentary: "no", allergic: false})
+CREATE (:PERSON:USER {name: "User5", age: 30, email: "user5@example.com", has_family: false, has_pets: true, sedentary: "yes", allergic: true})
+
+
+// Generate Person - Volunteer Nodes
+CREATE (:PERSON:VOLUNTEER {name: "Volunteer1", age: 31, email: "volunteer1@example.com", has_family: true, has_pets: true, sedentary: "no", allergic: false})
+CREATE (:PERSON:VOLUNTEER {name: "Volunteer2", age: 32, email: "volunteer2@example.com", has_family: false, has_pets: true, sedentary: "yes", allergic: true})
+CREATE (:PERSON:VOLUNTEER {name: "Volunteer3", age: 33, email: "volunteer3@example.com", has_family: true, has_pets: false, sedentary: "no", allergic: false})
+CREATE (:PERSON:VOLUNTEER {name: "Volunteer4", age: 34, email: "volunteer4@example.com", has_family: true, has_pets: true, sedentary: "no", allergic: false})
+CREATE (:PERSON:VOLUNTEER {name: "Volunteer5", age: 35, email: "volunteer5@example.com", has_family: false, has_pets: true, sedentary: "yes", allergic: true})
+
+
+//Generate Person - Vet Nodes
+CREATE (:PERSON:VET {name: "Vet1", age: 36, email: "vet1@example.com", has_family: true, has_pets: true, sedentary: "no", allergic: false})
+CREATE (:PERSON:VET {name: "Vet2", age: 37, email: "vet2@example.com", has_family: false, has_pets: true, sedentary: "yes", allergic: true})
+CREATE (:PERSON:VET {name: "Vet3", age: 38, email: "vet3@example.com", has_family: true, has_pets: false, sedentary: "no", allergic: false})
+CREATE (:PERSON:VET {name: "Vet4", age: 39, email: "vet4@example.com", has_family: true, has_pets: true, sedentary: "no", allergic: false})
+CREATE (:PERSON:VET {name: "Vet5", age: 40, email: "vet5@example.com", has_family: false, has_pets: true, sedentary: "yes", allergic: true})
+
+
+
+// Generate Dog nodes
+CREATE (:DOG {name: "Buddy", age: 3, rescue_date: date("2022-01-15"), vaccines: ["Rabies", "Parvo"], adopted: true, neutered: true})
+CREATE (:DOG {name: "Max", age: 2, rescue_date: date("2022-05-10"), vaccines: ["Distemper", "Bordetella"], adopted: false, neutered: false})
+CREATE (:DOG {name: "Charlie", age: 5, rescue_date: date("2021-11-20"), vaccines: [], adopted: false, neutered: true})
+CREATE (:DOG {name: "Lucy", age: 4, rescue_date: date("2022-03-18"), vaccines: ["Rabies", "Distemper"], adopted: true, neutered: true})
+CREATE (:DOG {name: "Milo", age: 1, rescue_date: date("2023-01-10"), vaccines: ["Parvo", "Bordetella"], adopted: false, neutered: false})
+CREATE (:DOG {name: "Bailey", age: 6, rescue_date: date("2021-09-05"), vaccines: ["Rabies", "Parvo", "Bordetella"], adopted: true, neutered: true})
+
+
+// Generate Race Nodes
+CREATE (:RACE {race_name: "Labrador Retriever", sheds: true, energetic: true, hypoallergenic: false, family_friendly: true, size: "Large", avg_lifespan: 12})
+CREATE (:RACE {race_name: "Golden Retriever", sheds: true, energetic: true, hypoallergenic: false, family_friendly: true, size: "Large", avg_lifespan: 10})
+CREATE (:RACE {race_name: "German Shepherd", sheds: true, energetic: true, hypoallergenic: false, family_friendly: true, size: "Large", avg_lifespan: 11})
+
+
+// Generate Shelter Nodes
+CREATE (:SHELTER {name: "Happy Paws Shelter", location: "City A", volunteers: 15, foundation_date: date("2010-06-20")})
+CREATE (:SHELTER {name: "Paws of Love Shelter", location: "City B", volunteers: 20, foundation_date: date("2008-09-12")})
+CREATE (:SHELTER {name: "Rescue Haven Shelter", location: "City C", volunteers: 12, foundation_date: date("2015-03-08")})
+
+
+
+
+// Person - User to Dog relationships
+MATCH (p:PERSON:USER {name: "User1"}), (d:DOG {name: "Buddy"})
+CREATE (p)-[:ADOPTED {since: date("2023-05-28"), picked_up: true, adopted_in: "City A"}]->(d)
+
+MATCH (p:PERSON:USER {name: "User2"}), (d:DOG {name: "Max"})
+CREATE (p)-[:HAS_VISITED]->(d)
+
+MATCH (p:PERSON:USER {name: "User3"}), (d:DOG {name: "Charlie"})
+CREATE (p)-[:LIKES]->(d)
+
+MATCH (p:PERSON:USER {name: "User4"}), (d:DOG {name: "Lucy"})
+CREATE (p)-[:DISLIKES]->(d)
+
+MATCH (p:PERSON:USER {name: "User5"}), (d:DOG {name: "Milo"})
+CREATE (p)-[:HAS_VISITED]->(d)
+
+MATCH (p:PERSON:USER {name: "User3"}), (d:DOG {name: "Buddy"})
+CREATE (p)-[:HAS_VISITED]->(d)
+
+
+// Person - Volunteer to Person - User relationships
+MATCH (p1:PERSON:VOLUNTEER {name: "Volunteer1"}), (p2:PERSON:USER {name: "User1"})
+CREATE (p1)-[:ATTENDING]->(p2)
+
+MATCH (p1:PERSON:VOLUNTEER {name: "Volunteer2"}), (p2:PERSON:USER {name: "User2"})
+CREATE (p1)-[:ATTENDING]->(p2)
+
+MATCH (p1:PERSON:VOLUNTEER {name: "Volunteer3"}), (p2:PERSON:USER {name: "User3"})
+CREATE (p1)-[:ATTENDING]->(p2)
+
+MATCH (p1:PERSON:VOLUNTEER {name: "Volunteer4"}), (p2:PERSON:USER {name: "User4"})
+CREATE (p1)-[:ATTENDING]->(p2)
+
+MATCH (p1:PERSON:VOLUNTEER {name: "Volunteer5"}), (p2:PERSON:USER {name: "User5"})
+CREATE (p1)-[:ATTENDING]->(p2)
+
+
+// Person - Volunteer to Dog relationships
+MATCH (p:PERSON:VOLUNTEER {name: "Volunteer1"}), (d:DOG {name: "Buddy"})
+CREATE (p)-[:ASSIGNED_TO]->(d)
+
+MATCH (p:PERSON:VOLUNTEER {name: "Volunteer2"}), (d:DOG {name: "Max"})
+CREATE (p)-[:ASSIGNED_TO]->(d)
+
+MATCH (p:PERSON:VOLUNTEER {name: "Volunteer3"}), (d:DOG {name: "Charlie"})
+CREATE (p)-[:ASSIGNED_TO]->(d)
+
+MATCH (p:PERSON:VOLUNTEER {name: "Volunteer4"}), (d:DOG {name: "Lucy"})
+CREATE (p)-[:ASSIGNED_TO]->(d)
+
+MATCH (p:PERSON:VOLUNTEER {name: "Volunteer5"}), (d:DOG {name: "Milo"})
+CREATE (p)-[:ASSIGNED_TO]->(d)
+
+
+// Dog to Person - Volunteer relationships
+MATCH (d:DOG {name: "Buddy"}), (p:PERSON:VOLUNTEER {name: "Volunteer1"})
+CREATE (d)-[:RESCUED_BY]->(p)
+
+MATCH (d:DOG {name: "Max"}), (p:PERSON:VOLUNTEER {name: "Volunteer2"})
+CREATE (d)-[:RESCUED_BY]->(p)
+
+MATCH (d:DOG {name: "Charlie"}), (p:PERSON:VOLUNTEER {name: "Volunteer3"})
+CREATE (d)-[:RESCUED_BY]->(p)
+
+MATCH (d:DOG {name: "Lucy"}), (p:PERSON:VOLUNTEER {name: "Volunteer4"})
+CREATE (d)-[:RESCUED_BY]->(p)
+
+MATCH (d:DOG {name: "Milo"}), (p:PERSON:VOLUNTEER {name: "Volunteer5"})
+CREATE (d)-[:RESCUED_BY]->(p)
+
+
+// Dog to Shelter relationships
+MATCH (d:DOG {name: "Buddy"}), (s:SHELTER {name: "Happy Paws Shelter"})
+CREATE (d)-[:IS_IN {since: date("2023-05-28"), origin: "City A", staff_ratio: 1}]->(s)
+
+MATCH (d:DOG {name: "Max"}), (s:SHELTER {name: "Paws of Love Shelter"})
+CREATE (d)-[:IS_IN {since: date("2023-05-28"), origin: "City B", staff_ratio: 1}]->(s)
+
+MATCH (d:DOG {name: "Charlie"}), (s:SHELTER {name: "Rescue Haven Shelter"})
+CREATE (d)-[:IS_IN {since: date("2023-05-28"), origin: "City C", staff_ratio: 1}]->(s)
+
+MATCH (d:DOG {name: "Lucy"}), (s:SHELTER {name: "Happy Paws Shelter"})
+CREATE (d)-[:IS_IN {since: date("2023-05-28"), origin: "City A", staff_ratio: 1}]->(s)
+
+MATCH (d:DOG {name: "Milo"}), (s:SHELTER {name: "Paws of Love Shelter"})
+CREATE (d)-[:IS_IN {since: date("2023-05-28"), origin: "City B", staff_ratio: 1}]->(s)
+
+MATCH (d:DOG {name: "Buddy"}), (s1:SHELTER {name: "Rescue Haven Shelter"})
+CREATE (d)-[:TRANSFERRED_FROM {since: date("2023-05-28")}]->(s1)
+
+MATCH (d:DOG {name: "Max"}), (s2:SHELTER {name: "Happy Paws Shelter"})
+CREATE (d)-[:TRANSFERRED_FROM {since: date("2023-05-28")}]->(s2)
+
+MATCH (d:DOG {name: "Charlie"}), (s3:SHELTER {name: "Paws of Love Shelter"})
+CREATE (d)-[:TRANSFERRED_FROM {since: date("2023-05-28")}]->(s3)
+
+MATCH (d:DOG {name: "Lucy"}), (s4:SHELTER {name: "Rescue Haven Shelter"})
+CREATE (d)-[:TRANSFERRED_FROM {since: date("2023-05-28")}]->(s4)
+
+MATCH (d:DOG {name: "Milo"}), (s5:SHELTER {name: "Happy Paws Shelter"})
+CREATE (d)-[:TRANSFERRED_FROM {since: date("2023-05-28")}]->(s5)
+
+
+// Dog to Race relationships
+MATCH (d:DOG {name: "Buddy"}), (r:RACE {race_name: "Labrador Retriever"})
+CREATE (d)-[:IS_A]->(r)
+
+MATCH (d:DOG {name: "Max"}), (r:RACE {race_name: "Golden Retriever"})
+CREATE (d)-[:IS_A]->(r)
+
+MATCH (d:DOG {name: "Charlie"}), (r:RACE {race_name: "German Shepherd"})
+CREATE (d)-[:IS_A]->(r)
+
+MATCH (d:DOG {name: "Lucy"}), (r:RACE {race_name: "Labrador Retriever"})
+CREATE (d)-[:IS_A]->(r)
+
+MATCH (d:DOG {name: "Milo"}), (r:RACE {race_name: "Golden Retriever"})
+CREATE (d)-[:IS_A]->(r)
+
+MATCH (d:DOG {name: "Bailey"}), (r:RACE {race_name: "Labrador Retriever"})
+CREATE (d)-[:IS_A]->(r)
+
+
+// Dog to Person - Vet relationships
+MATCH (d:DOG {name: "Buddy"}), (p:PERSON:VET {name: "Vet1"})
+CREATE (d)-[:ASSIGNED_TO]->(p)
+
+MATCH (d:DOG {name: "Max"}), (p:PERSON:VET {name: "Vet2"})
+CREATE (d)-[:ASSIGNED_TO]->(p)
+
+MATCH (d:DOG {name: "Charlie"}), (p:PERSON:VET {name: "Vet3"})
+CREATE (d)-[:ASSIGNED_TO]->(p)
+
+MATCH (d:DOG {name: "Lucy"}), (p:PERSON:VET {name: "Vet4"})
+CREATE (d)-[:ASSIGNED_TO]->(p)
+
+MATCH (d:DOG {name: "Milo"}), (p:PERSON:VET {name: "Vet5"})
+CREATE (d)-[:ASSIGNED_TO]->(p)
+
+MATCH (d:DOG {name: "Bailey"}), (p:PERSON:VET {name: "Vet3"})
+CREATE (d)-[:ASSIGNED_TO]->(p)
+
