@@ -37,24 +37,27 @@ Adding Nodes Section
 app.post('/person/add_user', function(req, res) {
     var name = req.body.name;
     var type_user = req.body.type_user; //VOLUNTEER, USER, VET
-    var age = req.body.age;
-    var allergic = req.body.allergic;
-    var has_family = req.body.has_family;
-    var has_pets = req.body.has_pets;
+    var age = parseInt(req.body.age);
+    var allergic = Boolean(req.body.allergic);
+    var has_family = Boolean(req.body.has_family);
+    var has_pets = Boolean(req.body.has_pets);
     var email = req.body.email;
-    var sedentary = req.body.sedentary;
+    var sedentary = Boolean(req.body.sedentary);
+
+    
 
     session
-        .run('CREATE (:PERSON:$type_userParam {name: $nameParam, age: $ageParam, email: $emailParam, has_family: $has_familyParam, has_pets: $has_petsParam, sedentary: $sedentaryParam, allergic: $allergicParam}) RETURN n.name', {nameParam: name, type_userParam: type_user, ageParam: age, allergicParam: allergic, has_familyParam: has_family, has_petsParam: has_pets, emailParam: email, sedentaryParam: sedentary})
-        .then(function(result) {
-            res.redirect('/');
-            res.json({message: 'Person added successfully'});
-            session.close();
-        })
+    .run('CREATE (:PERSON:'+ type_user +'{name: $nameBody, age: $ageBody, email: $emailBody, has_family: $has_familyBody, has_pets: $has_petsBody, sedentary: $sedentaryBody, allergic: $allergicBody})', {nameBody: name, ageBody: age, emailBody: email, has_familyBody: has_family, has_petsBody: has_pets, sedentaryBody: sedentary, allergicBody: allergic})
+    .then(function(result) {
+        res.json({message: 'Person added successfully'});
+        // res.redirect('/');
+        // session.close();
+    })
 
-        .catch(function(err) {
-            console.log(err);
-        });
+    .catch(function(err) {
+        console.log(err);
+    });
+
 });
 
 app.post('/dog/add', function(req, res) {
@@ -66,11 +69,11 @@ app.post('/dog/add', function(req, res) {
     var vaccines = req.body.vaccines;
 
     session
-    .run('CREATE (:DOG {name: $nameParam, age: $ageParam, rescue_date: $rescue_dateParam, vaccines: $vaccinesParam, adopted: $adoptedParam, neutered: $neuteredParam})', {nameParam: name, adoptedParam: adopted, ageParam: age, neuteredParam: neutered, rescue_dateParam: rescue_date, vaccinesParam: vaccines})
+    .run('CREATE (:DOG {name: $nameBody, age: $ageBody, rescue_date: $rescue_dateBody, vaccines: $vaccinesBody, adopted: $adoptedBody, neutered: $neuteredBody})', {nameBody: name, adoptedBody: adopted, ageBody: age, neuteredBody: neutered, rescue_dateBody: rescue_date, vaccinesBody: vaccines})
     .then(function(result) {
-        res.redirect('/');
         res.json({message: 'Dog added successfully'});
-        session.close();
+        // res.redirect('/');
+        // session.close();
     })
 
     .catch(function(err) {
@@ -88,11 +91,11 @@ app.post('/race/add', function(req, res) {
     var size = res.body.size;
 
     session
-    .run('CREATE (:RACE {race_name: $race_nameParam, sheds: $shedsParam, energetic: $energeticParam, hypoallergenic: $hypoallergenicParam, family_friendly: $family_friendlyParam, size: $sizeParam, avg_lifespan: $avg_lifespanParam})', {race_nameParam: race_name, avg_lifespanParam: avg_lifespan, energeticParam: energetic, family_friendlyParam: family_friendly, hypoallergenicParam: hypoallergenic, shedsParam: sheds, sizeParam: size})
+    .run('CREATE (:RACE {race_name: $race_nameBody, sheds: $shedsBody, energetic: $energeticBody, hypoallergenic: $hypoallergenicBody, family_friendly: $family_friendlyBody, size: $sizeBody, avg_lifespan: $avg_lifespanBody})', {race_nameBody: race_name, avg_lifespanBody: avg_lifespan, energeticBody: energetic, family_friendlyBody: family_friendly, hypoallergenicBody: hypoallergenic, shedsBody: sheds, sizeBody: size})
     .then(function(result) {
-        res.redirect('/');
         res.json({message: 'Race added successfully'});
-        session.close();
+        // res.redirect('/');
+        // session.close();
     })
 
     .catch(function(err) {
@@ -107,11 +110,11 @@ app.post('/shelter/add', function(req, res) {
     var volunteers = req.body.volunteers;
 
     session
-    .run('CREATE (:SHELTER {name: $nameParam, location: $locationParam, volunteers: $volunteerParam, foundation_date: $foundation_dateParam})', {nameParam: name, locationParam: location, volunteersParam: volunteers, foundation_dataParam: foundation_data})
+    .run('CREATE (:SHELTER {name: $nameBody, location: $locationBody, volunteers: $volunteerBody, foundation_date: $foundation_dateBody})', {nameBody: name, locationBody: location, volunteersBody: volunteers, foundation_dataBody: foundation_data})
     .then(function(result) {
-        res.redirect('/');
         res.json({message: 'Shelter added successfully'});
-        session.close();
+        // res.redirect('/');
+        // session.close();
     })
 
     .catch(function(err) {
@@ -136,11 +139,11 @@ app.post('/person/:nameParam/dog/:dogParam', function(req, res) {
 
     if (type_relationship == 'ADOPTED') {
         session
-        .run('MATCH (a:PERSON {name: $nameParam}), (b:DOG {name: $dogParam}) CREATE (a)-[r:ADOPTED {since: $sinceParam, picked_up: $picked_upParam, adopted_in: $adopted_inParam}]->(b)', {nameParam: nameParam, dogParam: dogParam, sinceParam: since, picked_upParam: picked_up, adopted_inParam: adopted_in})
+        .run('MATCH (a:PERSON {name: $nameParam}), (b:DOG {name: $dogParam}) MERGE (a)-[r:ADOPTED {since: $sinceBody, picked_up: $picked_upBody, adopted_in: $adopted_inBody}]->(b)', {nameParam: nameParam, dogParam: dogParam, sinceBody: since, picked_upBody: picked_up, adopted_inBody: adopted_in})
         .then(function(result) {
-            res.redirect('/');
             res.json({message: 'Relationship (ADOPTED) created successfully'});
-            session.close();
+            // res.redirect('/');
+            // session.close();
         })
     
         .catch(function(err) {
@@ -148,11 +151,11 @@ app.post('/person/:nameParam/dog/:dogParam', function(req, res) {
         });
     } else {
         session
-        .run('MATCH (a:PERSON {name: $nameParam}), (b:DOG {name: $dogParam}) CREATE (a)-[r:$type_relationshipParam]->(b)', {nameParam: nameParam, dogParam: dogParam, type_relationshipParam: type_relationship})
+        .run('MATCH (a:PERSON {name: $nameParam}), (b:DOG {name: $dogParam}) MERGE (a)-[r:' + type_relationship + ']->(b)', {nameParam: nameParam, dogParam: dogParam, type_relationshipBody: type_relationship})
         .then(function(result) {
-            res.redirect('/');
             res.json({message: 'Relationship created successfully'});
-            session.close();
+            // res.redirect('/');
+            // session.close();
         })
     
         .catch(function(err) {
@@ -162,16 +165,16 @@ app.post('/person/:nameParam/dog/:dogParam', function(req, res) {
 });
 
 // Dog -> Volunteer (RESCUED_BY)
-app.post('/dog/:dogParam/person/:nameParam', function(req, res) {
+app.post('/dog/:dogParam/rescued_by/person/:nameParam', function(req, res) {
     var nameParam = req.params.nameParam;
     var dogParam = req.params.dogParam; //Dog's name
 
     session
-    .run('MATCH (a:DOG {name: $dogParam}), (b:PERSON:VOLUNTEER {name: $nameParam}) CREATE (a)-[r:RESCUED_BY]->(b)', {nameParam: nameParam, dogParam: dogParam})
+    .run('MATCH (a:DOG {name: $dogParam}), (b:PERSON:VOLUNTEER {name: $nameParam}) MERGE (a)-[r:RESCUED_BY]->(b)', {nameParam: nameParam, dogParam: dogParam})
     .then(function(result) {
-        res.redirect('/');
         res.json({message: 'Relationship (RESCUED_BY) created successfully'});
-        session.close();
+        // res.redirect('/');
+        // session.close();
     })
 
     .catch(function(err) {
@@ -181,16 +184,16 @@ app.post('/dog/:dogParam/person/:nameParam', function(req, res) {
 });
 
 // Dog -> Vet (ASSIGNED_TO)
-app.post('/dog/:dogParam/person/:nameParam', function(req, res) {
+app.post('/dog/:dogParam/assigned_to/person/:nameParam', function(req, res) {
     var nameParam = req.params.nameParam;
     var dogParam = req.params.dogParam; //Dog's name
 
     session
-    .run('MATCH (a:DOG {name: $dogParam}), (b:PERSON:VET {name: $nameParam}) CREATE (a)-[r:ASSIGNED_TO]->(b)', {nameParam: nameParam, dogParam: dogParam})
+    .run('MATCH (a:DOG {name: $dogParam}), (b:PERSON:VET {name: $nameParam}) MERGE (a)-[r:ASSIGNED_TO]->(b)', {nameParam: nameParam, dogParam: dogParam})
     .then(function(result) {
-        res.redirect('/');
         res.json({message: 'Relationship (ASSIGNED_TO) created successfully'});
-        session.close();
+        // res.redirect('/');
+        // session.close();
     })
 
     .catch(function(err) {
@@ -211,11 +214,11 @@ app.post('/dog/:dogParam/shelter/:nameParam', function(req, res) {
 
     if (type_relationship == 'IS_IN') {
         session
-        .run('MATCH (a:DOG {name: $dogParam}), (b:SHELTER {name: $nameParam}) CREATE (a)-[r:IS_IN {since: $sinceParam, origin: $originParam, staff_ratio: $staff_ratioParam}]->(b)', {nameParam: nameParam, dogParam: dogParam, sinceParam: since, originParam: origin, staff_ratioParam: staff_ratio})
+        .run('MATCH (a:DOG {name: $dogParam}), (b:SHELTER {name: $nameParam}) MERGE (a)-[r:IS_IN {since: $sinceBody, origin: $originBody, staff_ratio: $staff_ratioBody}]->(b)', {nameParam: nameParam, dogParam: dogParam, sinceBody: since, originBody: origin, staff_ratioBody: staff_ratio})
         .then(function(result) {
-            res.redirect('/');
             res.json({message: 'Relationship (IS_IN) created successfully'});
-            session.close();
+            // res.redirect('/');
+            // session.close();
         })
     
         .catch(function(err) {
@@ -223,11 +226,11 @@ app.post('/dog/:dogParam/shelter/:nameParam', function(req, res) {
         });
     } else if (type_relationship == 'TRANSFERRED_FROM') {
         session
-        .run('MATCH (a:DOG {name: $dogParam}), (b:SHELTER {name: $nameParam}) CREATE (a)-[r:TRANSFERRED_FROM {since: $sinceParam}]->(b)', {nameParam: nameParam, dogParam: dogParam, sinceParam: since})
+        .run('MATCH (a:DOG {name: $dogParam}), (b:SHELTER {name: $nameParam}) MERGE (a)-[r:TRANSFERRED_FROM {since: $sinceBody}]->(b)', {nameParam: nameParam, dogParam: dogParam, sinceBody: since})
         .then(function(result) {
-            res.redirect('/');
             res.json({message: 'Relationship (IS_IN) created successfully'});
-            session.close();
+            // res.redirect('/');
+            // session.close();
         })
     
         .catch(function(err) {
@@ -242,11 +245,11 @@ app.post('/dog/:dogParam/race/:race_nameParam', function(req, res) {
     var dogParam = req.params.dogParam; //Dog's name
 
     session
-    .run('MATCH (a:DOG {name: $dogParam}), (b:RACE {race_name: $race_nameParam}) CREATE (a)-[r:IS_A]->(b)', {race_nameParam: race_nameParam, dogParam: dogParam})
+    .run('MATCH (a:DOG {name: $dogParam}), (b:RACE {race_name: $race_nameParam}) MERGE (a)-[r:IS_A]->(b)', {race_nameParam: race_nameParam, dogParam: dogParam})
     .then(function(result) {
-        res.redirect('/');
         res.json({message: 'Relationship (IS_IN) created successfully'});
-        session.close();
+        // res.redirect('/');
+        // session.close();
     })
 
     .catch(function(err) {
