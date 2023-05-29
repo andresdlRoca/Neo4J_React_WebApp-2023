@@ -75,7 +75,7 @@ app.post('/dog/add', function(req, res) {
     var vaccines = req.body.vaccines;
 
     session
-    .run('CREATE (:DOG {name: $nameBody, age: $ageBody, rescue_date: $rescue_dateBody, vaccines: $vaccinesBody, adopted: $adoptedBody, neutered: $neuteredBody})', {nameBody: name, adoptedBody: adopted, ageBody: age, neuteredBody: neutered, rescue_dateBody: rescue_date, vaccinesBody: vaccines})
+    .run('CREATE (:DOG {name: $nameBody, age: $ageBody, rescue_date: '+ rescue_date +', vaccines: '+vaccines+', adopted: $adoptedBody, neutered: $neuteredBody})', {nameBody: name, adoptedBody: adopted, ageBody: age, neuteredBody: neutered, rescue_dateBody: rescue_date, vaccinesBody: vaccines})
     .then(function(result) {
         session.close();
         res.json({message: 'Dog added successfully'});
@@ -118,11 +118,11 @@ app.post('/shelter/add', function(req, res) {
     session = driver.session();
     var name = req.body.name;
     var location = req.body.location;
-    var foundation_data = req.body.foundation_data;
+    var foundation_date = req.body.foundation_data;
     var volunteers = parseInt(req.body.volunteers);
 
     session
-    .run('CREATE (:SHELTER {name: $nameBody, location: $locationBody, volunteers: $volunteerBody, foundation_date: $foundation_dateBody})', {nameBody: name, locationBody: location, volunteersBody: volunteers, foundation_dataBody: foundation_data})
+    .run('CREATE (:SHELTER {name: $nameBody, location: $locationBody, volunteers: $volunteerBody, foundation_date: '+foundation_date+'})', {nameBody: name, locationBody: location, volunteersBody: volunteers})
     .then(function(result) {
         session.close();
         res.json({message: 'Shelter added successfully'});
@@ -231,7 +231,7 @@ app.post('/dog/:dogParam/shelter/:nameParam', function(req, res) {
 
     if (type_relationship == 'IS_IN') {
         session
-        .run('MATCH (a:DOG {name: $dogParam}), (b:SHELTER {name: $nameParam}) MERGE (a)-[r:IS_IN {since: $sinceBody, origin: $originBody, staff_ratio: $staff_ratioBody}]->(b)', {nameParam: nameParam, dogParam: dogParam, sinceBody: since, originBody: origin, staff_ratioBody: staff_ratio})
+        .run('MATCH (a:DOG {name: $dogParam}), (b:SHELTER {name: $nameParam}) MERGE (a)-[r:IS_IN {since: '+since+', origin: $originBody, staff_ratio: $staff_ratioBody}]->(b)', {nameParam: nameParam, dogParam: dogParam, sinceBody: since, originBody: origin, staff_ratioBody: staff_ratio})
         .then(function(result) {
             session.close();
             res.json({message: 'Relationship (IS_IN) created successfully'});
@@ -763,12 +763,119 @@ app.get('/other_users', function(req, res) {
 Recommending Dogs Section
 */
 
-//Recommends dogs based on user's preferences
+//Recommends dogs based on user's preferences on race
 app.get('/recommend_dogs/:nameParam', function(req, res) {
     session = driver.session();
     var nameParam = req.params.nameParam; //User's name
 
+    session
+    .run('MATCH (p1:PERSON {name: $nameParam})-[:LIKES]->(d1:DOG)-[:IS_A]->(:RACE)<-[:IS_A]-(d2:DOG) RETURN d2, rand() as r ORDER BY r LIMIT 5', {nameParam: nameParam})
+    .then(function(result) {
+        var results = [];
+        result.records.forEach(function(record) {
+            results.push({
+                id: record._fields[0].identity.low,
+                name: record._fields[0].properties.name,
+                age: record._fields[0].properties.age,
+                neutered: record._fields[0].properties.neutered,
+                rescue_date: record._fields[0].properties.rescue_date,
+                vaccines: record._fields[0].properties.vaccines,
+            });
+        });
+
+        res.json(results);
+    })
+
+    .catch(function(err) {
+        console.log(err);
+    });
+});
+
+//Recommends dogs based on user's preferences on age
+app.get('/recommend_dogs_age/:nameParam', function(req, res) {
+    session = driver.session();
+    var nameParam = req.params.nameParam; //User's name
     
+    session
+    .run('MATCH (p1:PERSON {name: $nameParam})-[:LIKES]->(d1:DOG) MATCH(d2:DOG) WHERE d2.age = d1.age RETURN d2, rand() as r ORDER BY r LIMIT 5', {nameParam: nameParam})
+    .then(function(result) {
+        var results = [];
+        result.records.forEach(function(record) {
+            results.push({
+                id: record._fields[0].identity.low,
+                name: record._fields[0].properties.name,
+                age: record._fields[0].properties.age,
+                neutered: record._fields[0].properties.neutered,
+                rescue_date: record._fields[0].properties.rescue_date,
+                vaccines: record._fields[0].properties.vaccines,
+            });
+        });
+
+        res.json(results);
+    })
+
+    .catch(function(err) {
+        console.log(err);
+    });
+});
+
+
+//Recommends dogs bases on user's location
+app.get('/recommend_dogs_location/:nameParam', function(req, res) {
+    session = driver.session();
+    var nameParam = req.params.nameParam; //User's name
+
+    session
+    .run('MATCH (p1:PERSON {name: $nameParam})-[:LIKES]->(d1:DOG)-[:IS_IN]->(l1:SHELTER) MATCH(d2:DOG)-[:IS_IN]->(l2:SHELTER) WHERE l1.name = l2.name RETURN d2, rand() as r ORDER BY r LIMIT 5', {nameParam: nameParam})
+    .then(function(result) {
+        var results = [];
+        result.records.forEach(function(record) {
+            results.push({
+                id: record._fields[0].identity.low,
+                name: record._fields[0].properties.name,
+                age: record._fields[0].properties.age,
+                neutered: record._fields[0].properties.neutered,
+                rescue_date: record._fields[0].properties.rescue_date,
+                vaccines: record._fields[0].properties.vaccines,
+
+            });
+        });
+
+        res.json(results);
+    })
+
+    .catch(function(err) {
+        console.log(err);
+    });
+});
+
+
+//Recommends dogs based on user's preferences on size
+app.get('/recommend_dogs_size/:nameParam', function(req, res) {
+    session = driver.session();
+    var nameParam = req.params.nameParam; //User's name
+    
+    session
+    .run('MATCH (p1:PERSON {name: $nameParam})-[:LIKES]->(d1:DOG)-[:IS_A]->(r1:RACE) MATCH(d2:DOG)-[:IS_A]->(r2:RACE) WHERE r1.size = r2.size RETURN d2, rand() as r ORDER BY r LIMIT 5', {nameParam: nameParam})
+    .then(function(result) {
+        var results = [];
+        result.records.forEach(function(record) {
+            results.push({
+                id: record._fields[0].identity.low,
+                name: record._fields[0].properties.name,
+                age: record._fields[0].properties.age,
+                neutered: record._fields[0].properties.neutered,
+                rescue_date: record._fields[0].properties.rescue_date,
+                vaccines: record._fields[0].properties.vaccines,
+            });
+        });
+
+        res.json(results);
+    })
+
+    .catch(function(err) {
+        console.log(err);
+    });
 });
 
 
