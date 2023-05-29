@@ -21,8 +21,6 @@ app.use(express.static(path.join(__dirname, 'public'))); // Set public folder
 const neo4j_user = process.env.NEO4J_USER;
 const neo4j_pass = process.env.NEO4J_PASS;
 
-
-
 const driver = neo4j.driver('bolt://127.0.0.1:7687', neo4j.auth.basic(neo4j_user, neo4j_pass));
 var session = driver.session()
 
@@ -69,7 +67,7 @@ app.post('/dog/add', function(req, res) {
     session = driver.session();
     var name = req.body.name;
     var adopted = req.body.adopted;
-    adopter = adopter === "true";
+    adopted = adopted === "true";
     var age = parseInt(req.body.age);
     var neutered = req.body.neutered;
     neutered = neutered === "true";
@@ -590,6 +588,83 @@ app.delete('/deleteAssignedTo/:nameParam/:dogParam', function(req, res) {
     .then(function(result) {
         session.close();
         res.json({message: 'ASSIGNED_TO relationship deleted successfully'});
+    })
+
+    .catch(function(err) {
+        console.log(err);
+    })
+});
+
+//Delete properties of Person node
+
+app.delete('/deletePersonProperties/:nameParam', function(req, res) {
+    session = driver.session();
+    var nameParam = req.params.nameParam; //Person's name
+    var property = req.body.property; // Property to be deleted
+
+    session
+    .run('MATCH (n:PERSON {name: $nameParam}) REMOVE n.$property', {nameParam: nameParam, property: property})
+    .then(function(result) {
+        session.close();
+        res.json({message: 'PERSON property deleted successfully'});
+    })
+
+    .catch(function(err) {
+        console.log(err);
+    })
+});
+
+
+//Delete properties of Dog node
+app.delete('/deleteDogProperties/:nameParam', function(req, res) {
+    session = driver.session();
+    var nameParam = req.params.nameParam; //Dog's name
+    var property = req.body.property; // Property to be deleted
+
+    session
+    .run('MATCH (n:DOG {name: $nameParam}) REMOVE n.$property', {nameParam: nameParam, property: property})
+    .then(function(result) {
+        session.close();
+        res.json({message: 'DOG property deleted successfully'});
+    })
+
+    .catch(function(err) {
+        console.log(err);
+    })
+});
+
+
+//Delete properties of ADOPTED relationship
+app.delete('/deleteAdoptedProperties/:nameParam/:dogParam', function(req, res) {
+    session = driver.session();
+    var nameParam = req.params.nameParam;
+    var dogParam = req.params.dogParam;
+    var property = req.body.property;
+
+    session
+    .run('MATCH (a:PERSON {name: $nameParam})-[r:ADOPTED]->(b:DOG {name: $dogParam}) REMOVE r.$property', {nameParam: nameParam, dogParam: dogParam, property: property})
+    .then(function(result) {
+        session.close();
+        res.json({message: 'ADOPTED property deleted successfully'});
+    })
+
+    .catch(function(err) {
+        console.log(err);
+    })
+});
+
+//Delete properties of IS_IN relationship
+app.delete('/deleteIsInProperties/:nameParam/:dogParam', function(req, res) {
+    session = driver.session();
+    var nameParam = req.params.nameParam;
+    var dogParam = req.params.dogParam;
+    var property = req.body.property;
+
+    session
+    .run('MATCH (a:SHELTER {name: $nameParam})<-[r:IS_IN]-(b:DOG {name: $dogParam}) REMOVE r.$property', {nameParam: nameParam, dogParam: dogParam, property: property})
+    .then(function(result) {
+        session.close();
+        res.json({message: 'IS_IN property deleted successfully'});
     })
 
     .catch(function(err) {
