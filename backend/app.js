@@ -684,6 +684,18 @@ app.get('/other_users', function(req, res) {
 });
 
 
+/*
+Recommending Dogs Section
+*/
+
+//Recommends dogs based on user's preferences
+app.get('/recommend_dogs/:nameParam', function(req, res) {
+    session = driver.session();
+    var nameParam = req.params.nameParam; //User's name
+
+    
+});
+
 
 app.listen(3000); // Start server
 console.log("Server started on port 3000");
