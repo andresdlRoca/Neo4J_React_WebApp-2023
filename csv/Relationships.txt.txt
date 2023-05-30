@@ -1,0 +1,80 @@
+//Attending to Relationship Person-Volunteer to Person-User
+
+MATCH (p1:Person:Volunteer {name: "William Martin"}), (d1:Person:User {name: "John Doe"})
+CREATE (p1)-[:ATTENDING]->(d1);
+
+MATCH (p2:Person:Volunteer {name: "Olivia Thompson"}), (d2:Person:User {name: "Jane Smith"})
+CREATE (p2)-[:ATTENDING]->(d2);
+
+MATCH (p3:Person:Volunteer {name: "James Lee"}), (d3:Person:User {name: "Michael Johnson"})
+CREATE (p3)-[:ATTENDING]->(d3);
+
+MATCH (p4:Person:Volunteer {name: "Sophia Walker"}), (d4:Person:User {name: "Emily Davis"})
+CREATE (p4)-[:ATTENDING]->(d4);
+
+MATCH (p5:Person:Volunteer {name: "Daniel White"}), (d5:Person:User {name: "David Wilson"})
+CREATE (p5)-[:ATTENDING]->(d5);
+
+MATCH (p6:Person:Volunteer {name: "Ava Hall"}), (d6:Person:User {name: "Sarah Brown"})
+CREATE (p6)-[:ATTENDING]->(d6);
+
+MATCH (p7:Person:Volunteer {name: "Joseph Lewis"}), (d7:Person:User {name: "Robert Anderson"})
+CREATE (p7)-[:ATTENDING]->(d7);
+
+MATCH (p8:Person:Volunteer {name: "Mia Turner"}), (d8:Person:User {name: "Amy Taylor"})
+CREATE (p8)-[:ATTENDING]->(d8);
+
+MATCH (p9:Person:Volunteer {name: "Christopher Harris"}), (d9:Person:User {name: "Thomas Clark"})
+CREATE (p9)-[:ATTENDING]->(d9);
+
+MATCH (p10:Person:Volunteer {name: "Charlotte King"}), (d10:Person:User {name: "Jessica Adams"})
+CREATE (p10)-[:ATTENDING]->(d10);
+
+
+
+//Assigned To Person-Volunteer to Dog
+
+MATCH (p1:Person:Volunteer {name: "William Martin"}), (d1:Dog {name: "Buddy"})
+CREATE (p1)-[:ASSIGNED_TO]->(d1);
+
+MATCH (p2:Person:Volunteer {name: "Olivia Thompson"}), (d2:Dog {name: "Max"})
+CREATE (p2)-[:ASSIGNED_TO]->(d2);
+
+MATCH (p3:Person:Volunteer {name: "James Lee"}), (d3:Dog {name: "Charlie"})
+CREATE (p3)-[:ASSIGNED_TO]->(d3);
+
+MATCH (p4:Person:Volunteer {name: "Sophia Walker"}), (d4:Dog {name: "Cooper"})
+CREATE (p4)-[:ASSIGNED_TO]->(d4);
+
+MATCH (p5:Person:Volunteer {name: "Daniel White"}), (d5:Dog {name: "Lucy"})
+CREATE (p5)-[:ASSIGNED_TO]->(d5);
+
+MATCH (p6:Person:Volunteer {name: "Daniel White"}), (d6:Dog {name: "Bailey"})
+CREATE (p6)-[:ASSIGNED_TO]->(d6);
+
+MATCH (p7:Person:Volunteer {name: "Ava Hall"}), (d7:Dog {name: "Daisy"})
+CREATE (p7)-[:ASSIGNED_TO]->(d7);
+
+MATCH (p8:Person:Volunteer {name: "Joseph Lewis"}), (d8:Dog {name: "Sadie"})
+CREATE (p8)-[:ASSIGNED_TO]->(d8);
+
+MATCH (p9:Person:Volunteer {name: "Mia Turner"}), (d9:Dog {name: "Molly"})
+CREATE (p9)-[:ASSIGNED_TO]->(d9);
+
+MATCH (p10:Person:Volunteer {name: "Christopher Harris"}), (d10:Dog {name: "Lola"})
+CREATE (p10)-[:ASSIGNED_TO]->(d10);
+
+MATCH (p11:Person:Volunteer {name: "Charlotte King"}), (d11:Dog {name: "Tucker"})
+CREATE (p11)-[:ASSIGNED_TO]->(d11);
+
+MATCH (p12:Person:Volunteer {name: "James Lee"}), (d12:Dog {name: "Zoe"})
+CREATE (p12)-[:ASSIGNED_TO]->(d12);
+
+MATCH (p13:Person:Volunteer {name: "Sophia Walker"}), (d13:Dog {name: "Bear"})
+CREATE (p13)-[:ASSIGNED_TO]->(d13);
+
+MATCH (p14:Person:Volunteer {name: "Daniel White"}), (d14:Dog {name: "Milo"})
+CREATE (p14)-[:ASSIGNED_TO]->(d14);
+
+MATCH (p15:Person:Volunteer {name: "Olivia Thompson"}), (d15:Dog {name: "Rocky"})
+CREATE (p15)-[:ASSIGNED_TO]->(d15);

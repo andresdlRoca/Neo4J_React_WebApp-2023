@@ -58,23 +58,37 @@ function generatePropertiesString(properties) {
     }
   }
   
-  // Read the CSV file and add data to Neo4j
-  fs.createReadStream(csvFilePath)
-    .pipe(csv())
-    .on('data', (row) => {
-      const labels = row.label.split(',');
-      const properties = { ...row };
-      delete properties.label;
-  
-      // Create a new Neo4j session
-      const session = driver.session();
-  
-      // Call the function to add the node to Neo4j
-      addNodeToNeo4j(session, labels, properties)
-        .catch((error) => console.error(error))
-        .finally(() => session.close());
-    })
-    .on('end', () => {
+
+
+const promises = [];
+
+// Read the CSV file and add data to Neo4j
+fs.createReadStream(csvFilePath)
+  .pipe(csv())
+  .on('data', (row) => {
+    const labels = row.label.split(',');
+    const properties = { ...row };
+    delete properties.label;
+
+    // Create a new Neo4j session
+    const session = driver.session();
+
+    // Call the function to add the node to Neo4j
+    const promise = addNodeToNeo4j(session, labels, properties)
+      .catch((error) => console.error(error))
+      .finally(() => session.close());
+
+    promises.push(promise);
+  })
+  .on('end', async () => {
+    try {
+      await Promise.all(promises);
       console.log('CSV processing finished.');
+    } catch (error) {
+      console.error(error);
+    } finally {
       driver.close();
-    });
+    }
+  });
+
+// ...
