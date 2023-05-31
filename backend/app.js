@@ -41,7 +41,7 @@ Adding Nodes Section
 app.post('/person/add_user', function(req, res) {
     session = driver.session();
     var name = req.body.name;
-    var type_user = req.body.type_user; //VOLUNTEER, USER, VET
+    var type_user = req.body.type_user; //Volunteer, User, Vet
     var age = parseInt(req.body.age);
     var allergic = req.body.allergic;
     allergic = allergic === "true";
@@ -56,7 +56,7 @@ app.post('/person/add_user', function(req, res) {
     
 
     session
-    .run('CREATE (:PERSON:'+ type_user +'{name: $nameBody, age: $ageBody, email: $emailBody, has_family: $has_familyBody, has_pets: $has_petsBody, sedentary: $sedentaryBody, allergic: $allergicBody})', {nameBody: name, ageBody: age, emailBody: email, has_familyBody: has_family, has_petsBody: has_pets, sedentaryBody: sedentary, allergicBody: allergic})
+    .run('CREATE (:Person:'+ type_user +'{name: $nameBody, age: $ageBody, email: $emailBody, has_family: $has_familyBody, has_pets: $has_petsBody, sedentary: $sedentaryBody, allergic: $allergicBody})', {nameBody: name, ageBody: age, emailBody: email, has_familyBody: has_family, has_petsBody: has_pets, sedentaryBody: sedentary, allergicBody: allergic})
     .then(function(result) {
         session.close();
         res.json({message: 'Person added successfully'});
@@ -81,7 +81,7 @@ app.post('/dog/add', function(req, res) {
     var vaccines = req.body.vaccines;
 
     session
-    .run('CREATE (:DOG {name: $nameBody, age: $ageBody, rescue_date: '+ rescue_date +', vaccines: '+vaccines+', adopted: $adoptedBody, neutered: $neuteredBody})', {nameBody: name, adoptedBody: adopted, ageBody: age, neuteredBody: neutered, rescue_dateBody: rescue_date, vaccinesBody: vaccines})
+    .run('CREATE (:Dog {name: $nameBody, age: $ageBody, rescue_date: '+ rescue_date +', vaccines: '+vaccines+', adopted: $adoptedBody, neutered: $neuteredBody})', {nameBody: name, adoptedBody: adopted, ageBody: age, neuteredBody: neutered, rescue_dateBody: rescue_date, vaccinesBody: vaccines})
     .then(function(result) {
         session.close();
         res.json({message: 'Dog added successfully'});
@@ -108,7 +108,7 @@ app.post('/race/add', function(req, res) {
     var size = res.body.size;
 
     session
-    .run('CREATE (:RACE {race_name: $race_nameBody, sheds: $shedsBody, energetic: $energeticBody, hypoallergenic: $hypoallergenicBody, family_friendly: $family_friendlyBody, size: $sizeBody, avg_lifespan: $avg_lifespanBody})', {race_nameBody: race_name, avg_lifespanBody: avg_lifespan, energeticBody: energetic, family_friendlyBody: family_friendly, hypoallergenicBody: hypoallergenic, shedsBody: sheds, sizeBody: size})
+    .run('CREATE (:Race {race_name: $race_nameBody, sheds: $shedsBody, energetic: $energeticBody, hypoallergenic: $hypoallergenicBody, family_friendly: $family_friendlyBody, size: $sizeBody, avg_lifespan: $avg_lifespanBody})', {race_nameBody: race_name, avg_lifespanBody: avg_lifespan, energeticBody: energetic, family_friendlyBody: family_friendly, hypoallergenicBody: hypoallergenic, shedsBody: sheds, sizeBody: size})
     .then(function(result) {
         session.close();
         res.json({message: 'Race added successfully'});
@@ -128,7 +128,7 @@ app.post('/shelter/add', function(req, res) {
     var volunteers = parseInt(req.body.volunteers);
 
     session
-    .run('CREATE (:SHELTER {name: $nameBody, location: $locationBody, volunteers: $volunteerBody, foundation_date: '+foundation_date+'})', {nameBody: name, locationBody: location, volunteersBody: volunteers})
+    .run('CREATE (:Shelter {name: $nameBody, location: $locationBody, volunteers: $volunteerBody, foundation_date: '+foundation_date+'})', {nameBody: name, locationBody: location, volunteersBody: volunteers})
     .then(function(result) {
         session.close();
         res.json({message: 'Shelter added successfully'});
@@ -159,7 +159,7 @@ app.post('/person/:nameParam/dog/:dogParam', function(req, res) {
 
     if (type_relationship == 'ADOPTED') {
         session
-        .run('MATCH (a:PERSON {name: $nameParam}), (b:DOG {name: $dogParam}) MERGE (a)-[r:ADOPTED {since: $sinceBody, picked_up: $picked_upBody, adopted_in: $adopted_inBody}]->(b)', {nameParam: nameParam, dogParam: dogParam, sinceBody: since, picked_upBody: picked_up, adopted_inBody: adopted_in})
+        .run('MATCH (a:Person {name: $nameParam}), (b:Dog {name: $dogParam}) MERGE (a)-[r:ADOPTED {since: $sinceBody, picked_up: $picked_upBody, adopted_in: $adopted_inBody}]->(b)', {nameParam: nameParam, dogParam: dogParam, sinceBody: since, picked_upBody: picked_up, adopted_inBody: adopted_in})
         .then(function(result) {
             session.close();
             res.json({message: 'Relationship (ADOPTED) created successfully'});
@@ -171,7 +171,7 @@ app.post('/person/:nameParam/dog/:dogParam', function(req, res) {
         });
     } else {
         session
-        .run('MATCH (a:PERSON {name: $nameParam}), (b:DOG {name: $dogParam}) MERGE (a)-[r:' + type_relationship + ']->(b)', {nameParam: nameParam, dogParam: dogParam, type_relationshipBody: type_relationship})
+        .run('MATCH (a:Person {name: $nameParam}), (b:Dog {name: $dogParam}) MERGE (a)-[r:' + type_relationship + ']->(b)', {nameParam: nameParam, dogParam: dogParam, type_relationshipBody: type_relationship})
         .then(function(result) {
             session.close();
             res.json({message: 'Relationship created successfully'});
@@ -191,7 +191,7 @@ app.post('/dog/:dogParam/rescued_by/person/:nameParam', function(req, res) {
     var dogParam = req.params.dogParam; //Dog's name
 
     session
-    .run('MATCH (a:DOG {name: $dogParam}), (b:PERSON:VOLUNTEER {name: $nameParam}) MERGE (a)-[r:RESCUED_BY]->(b)', {nameParam: nameParam, dogParam: dogParam})
+    .run('MATCH (a:Dog {name: $dogParam}), (b:Person:Volunteer {name: $nameParam}) MERGE (a)-[r:RESCUED_BY]->(b)', {nameParam: nameParam, dogParam: dogParam})
     .then(function(result) {
         session.close();
         res.json({message: 'Relationship (RESCUED_BY) created successfully'});
@@ -211,7 +211,7 @@ app.post('/dog/:dogParam/assigned_to/person/:nameParam', function(req, res) {
     var dogParam = req.params.dogParam; //Dog's name
 
     session
-    .run('MATCH (a:DOG {name: $dogParam}), (b:PERSON:VET {name: $nameParam}) MERGE (a)-[r:ASSIGNED_TO]->(b)', {nameParam: nameParam, dogParam: dogParam})
+    .run('MATCH (a:Dog {name: $dogParam}), (b:Person:Vet {name: $nameParam}) MERGE (a)-[r:ASSIGNED_TO]->(b)', {nameParam: nameParam, dogParam: dogParam})
     .then(function(result) {
         session.close();
         res.json({message: 'Relationship (ASSIGNED_TO) created successfully'});
@@ -237,7 +237,7 @@ app.post('/dog/:dogParam/shelter/:nameParam', function(req, res) {
 
     if (type_relationship == 'IS_IN') {
         session
-        .run('MATCH (a:DOG {name: $dogParam}), (b:SHELTER {name: $nameParam}) MERGE (a)-[r:IS_IN {since: '+since+', origin: $originBody, staff_ratio: $staff_ratioBody}]->(b)', {nameParam: nameParam, dogParam: dogParam, sinceBody: since, originBody: origin, staff_ratioBody: staff_ratio})
+        .run('MATCH (a:Dog {name: $dogParam}), (b:Shelter {name: $nameParam}) MERGE (a)-[r:IS_IN {since: '+since+', origin: $originBody, staff_ratio: $staff_ratioBody}]->(b)', {nameParam: nameParam, dogParam: dogParam, sinceBody: since, originBody: origin, staff_ratioBody: staff_ratio})
         .then(function(result) {
             session.close();
             res.json({message: 'Relationship (IS_IN) created successfully'});
@@ -249,7 +249,7 @@ app.post('/dog/:dogParam/shelter/:nameParam', function(req, res) {
         });
     } else if (type_relationship == 'TRANSFERRED_FROM') {
         session
-        .run('MATCH (a:DOG {name: $dogParam}), (b:SHELTER {name: $nameParam}) MERGE (a)-[r:TRANSFERRED_FROM {since: $sinceBody}]->(b)', {nameParam: nameParam, dogParam: dogParam, sinceBody: since})
+        .run('MATCH (a:Dog {name: $dogParam}), (b:Shelter {name: $nameParam}) MERGE (a)-[r:TRANSFERRED_FROM {since: $sinceBody}]->(b)', {nameParam: nameParam, dogParam: dogParam, sinceBody: since})
         .then(function(result) {
             session.close();
             res.json({message: 'Relationship (IS_IN) created successfully'});
@@ -269,7 +269,7 @@ app.post('/dog/:dogParam/race/:race_nameParam', function(req, res) {
     var dogParam = req.params.dogParam; //Dog's name
 
     session
-    .run('MATCH (a:DOG {name: $dogParam}), (b:RACE {race_name: $race_nameParam}) MERGE (a)-[r:IS_A]->(b)', {race_nameParam: race_nameParam, dogParam: dogParam})
+    .run('MATCH (a:Dog {name: $dogParam}), (b:Race {race_name: $race_nameParam}) MERGE (a)-[r:IS_A]->(b)', {race_nameParam: race_nameParam, dogParam: dogParam})
     .then(function(result) {
         session.close();
         res.json({message: 'Relationship (IS_IN) created successfully'});
@@ -295,7 +295,7 @@ app.put('/person/:nameParam', function(req, res) {
     var new_email = req.body.new_email;
     
     session
-    .run('MATCH (n:PERSON {name: $nameParam}) SET n.age = $new_ageBody, n.email = $new_emailBody', {nameParam: nameParam, new_nameBody: new_name, new_ageBody: new_age, new_emailBody: new_email})
+    .run('MATCH (n:Person {name: $nameParam}) SET n.age = $new_ageBody, n.email = $new_emailBody', {nameParam: nameParam, new_nameBody: new_name, new_ageBody: new_age, new_emailBody: new_email})
     .then(function(result) {
         session.close();
         res.json({message: 'Person updated successfully'});
@@ -313,7 +313,7 @@ app.put('/person/:nameParam/label/:labelParam', function(req, res) {
     var labelParam = req.params.labelParam;
 
     session
-    .run('MATCH (n:PERSON {name: $nameParam}) SET n:PERSON'+labelParam, {nameParam: nameParam, labelParam: labelParam})
+    .run('MATCH (n:Person {name: $nameParam}) SET n:Person'+labelParam, {nameParam: nameParam, labelParam: labelParam})
     .then(function(result) {
         session.close();
         res.json({message: 'Person label updated successfully'});
@@ -332,7 +332,7 @@ app.put('/dog/:dogParam', function(req, res) {
     var new_neutered = req.body.new_neutered;
 
     session
-    .run('MATCH (n:DOG {name: $dogParam}) SET n.age = $new_ageBody, n.neutered = $new_neuteredBody', {dogParam: dogParam, new_ageBody: new_age, new_neuteredBody: new_neutered})
+    .run('MATCH (n:Dog {name: $dogParam}) SET n.age = $new_ageBody, n.neutered = $new_neuteredBody', {dogParam: dogParam, new_ageBody: new_age, new_neuteredBody: new_neutered})
     .then(function(result) {
         session.close();
         res.json({message: 'Dog updated successfully'});
@@ -351,7 +351,7 @@ app.put('/shelter/:nameParam', function(req, res) {
     var new_location = req.body.new_location;
 
     session
-    .run('MATCH (n:SHELTER {name: $nameParam}) SET n.volunteers = $new_volunteersBody, n.location = $new_locationBody', {nameParam: nameParam, new_volunteersBody: new_volunteers, new_locationBody: new_location})
+    .run('MATCH (n:Shelter {name: $nameParam}) SET n.volunteers = $new_volunteersBody, n.location = $new_locationBody', {nameParam: nameParam, new_volunteersBody: new_volunteers, new_locationBody: new_location})
     .then(function(result) {
         session.close();
         res.json({message: 'Shelter updated successfully'});
@@ -376,7 +376,7 @@ app.post('/picked_up/person/:nameParam/dog/:dogParam', function(req, res) {
     picked_up = picked_up === "true";
 
     session
-    .run('MATCH (a:PERSON {name: $nameParam})-[r:ADOPTED]->(b:DOG {name: $dogParam}) SET r.picked_up = $picked_upBody', {nameParam: nameParam, dogParam: dogParam, picked_upBody: picked_up})
+    .run('MATCH (a:Person {name: $nameParam})-[r:ADOPTED]->(b:Dog {name: $dogParam}) SET r.picked_up = $picked_upBody', {nameParam: nameParam, dogParam: dogParam, picked_upBody: picked_up})
     .then(function(result) {
         session.close();
         res.json({message: 'Picked_up state on relationship ADOPTED modified successfully'});
@@ -396,7 +396,7 @@ app.post('/update/staff_ratio/shelter/:nameParam/dog/:dogParam', function(req, r
     var staff_ratio = parseInt(req.body.staff_ratio);
 
     session
-    .run('MATCH (a:SHELTER {name: $nameParam})<-[r:IS_IN]-(b:DOG {name: $dogParam}) SET r.staff_ratio = $staff_ratioBody', {nameParam: nameParam, dogParam: dogParam, staff_ratioBody: staff_ratio})
+    .run('MATCH (a:Shelter {name: $nameParam})<-[r:IS_IN]-(b:Dog {name: $dogParam}) SET r.staff_ratio = $staff_ratioBody', {nameParam: nameParam, dogParam: dogParam, staff_ratioBody: staff_ratio})
     .then(function(result) {
         res.json({message: 'staff_ratio property on relationship IS_IN modified successfully'});
         session.close();
@@ -416,7 +416,7 @@ app.post('/update/dog/:dogParam/shelter/:nameParam', function(req, res) {
     var nameParam = req.params.nameParam; //Shelter's name
 
     session
-    .run('MATCH (a:DOG {name: $dogParam})-[r:IS_IN]->(b:SHELTER {name: $nameParam}) DELETE r CREATE (a)<-[newR:SHELTERS]-(b)', {dogParam: dogParam, nameParam: nameParam})
+    .run('MATCH (a:Dog {name: $dogParam})-[r:IS_IN]->(b:Shelter {name: $nameParam}) DELETE r CREATE (a)<-[newR:SHELTERS]-(b)', {dogParam: dogParam, nameParam: nameParam})
     .then(function(result) {
         res.json({message: 'Relationship direction to shelter to dog modified successfully'});
         session.close();
@@ -435,7 +435,7 @@ app.post('/update/shelter/:nameParam/dog/:dogParam', function(req, res) {
     var dogParam = req.params.dogParam;
 
     session
-    .run('MATCH (a:SHELTER {name: $nameParam})-[r:SHELTERS]->(b:DOG {name: $dogParam}) DELETE r MERGE (b)-[newR:IS_IN]->(a)', {nameParam: nameParam, dogParam: dogParam})
+    .run('MATCH (a:Shelter {name: $nameParam})-[r:SHELTERS]->(b:Dog {name: $dogParam}) DELETE r MERGE (b)-[newR:IS_IN]->(a)', {nameParam: nameParam, dogParam: dogParam})
     .then(function(result) {
         res.json({message: 'Relationship direction to dog to shelter modified successfully'});
         session.close();
@@ -458,7 +458,7 @@ app.delete('/deletePerson/:nameParam', function(req, res) {
     var nameParam = req.params.nameParam;
 
     session
-    .run('MATCH (n:PERSON {name: $nameParam}) DETACH DELETE n', {nameParam: nameParam})
+    .run('MATCH (n:Person {name: $nameParam}) DETACH DELETE n', {nameParam: nameParam})
     .then(function(result) {
         session.close();
         res.json({message: 'Person deleted successfully'});
@@ -475,7 +475,7 @@ app.delete('/deleteDog/:nameParam', function(req, res) {
     var nameParam = req.params.nameParam;
     
     session
-    .run('MATCH (n:DOG {name: $nameParam}) DETACH DELETE n', {nameParam: nameParam})
+    .run('MATCH (n:Dog {name: $nameParam}) DETACH DELETE n', {nameParam: nameParam})
     .then(function(result) {
         session.close();
         res.json({message: 'Dog deleted successfully'});
@@ -492,7 +492,7 @@ app.delete('/deleteShelter/:nameParam', function(req, res) {
     var nameParam = req.params.nameParam;
 
     session
-    .run('MATCH (n:SHELTER {name: $nameParam}) DETACH DELETE n', {nameParam: nameParam})
+    .run('MATCH (n:Shelter {name: $nameParam}) DETACH DELETE n', {nameParam: nameParam})
     .then(function(result) {
         session.close();
         res.json({message: 'Shelter deleted successfully'});
@@ -515,7 +515,7 @@ app.delete('/deleteAdopted/:nameParam/:dogParam', function(req, res) {
     var dogParam = req.params.dogParam;
 
     session
-    .run('MATCH (a:PERSON {name: $nameParam})-[r:ADOPTED]->(b:DOG {name: $dogParam}) DELETE r', {nameParam: nameParam, dogParam: dogParam})
+    .run('MATCH (a:Person {name: $nameParam})-[r:ADOPTED]->(b:Dog {name: $dogParam}) DELETE r', {nameParam: nameParam, dogParam: dogParam})
     .then(function(result) {
         session.close();
         res.json({message: 'ADOPTED relationship deleted successfully'});
@@ -534,7 +534,7 @@ app.delete('/deleteIsIn/:nameParam/:dogParam', function(req, res) {
     var dogParam = req.params.dogParam;
 
     session
-    .run('MATCH (a:SHELTER {name: $nameParam})-[r:IS_IN]->(b:DOG {name: $dogParam}) DELETE r', {nameParam: nameParam, dogParam: dogParam})
+    .run('MATCH (a:Shelter {name: $nameParam})-[r:IS_IN]->(b:Dog {name: $dogParam}) DELETE r', {nameParam: nameParam, dogParam: dogParam})
     .then(function(result) {
         session.close();
         res.json({message: 'IS_IN relationship deleted successfully'});
@@ -552,7 +552,7 @@ app.delete('/deleteLikes/:nameParam/:dogParam', function(req, res) {
     var dogParam = req.params.dogParam;
 
     session
-    .run('MATCH (a:PERSON {name: $nameParam})-[r:LIKES]->(b:DOG {name: $dogParam}) DELETE r', {nameParam: nameParam, dogParam: dogParam})
+    .run('MATCH (a:Person {name: $nameParam})-[r:LIKES]->(b:Dog {name: $dogParam}) DELETE r', {nameParam: nameParam, dogParam: dogParam})
     .then(function(result) {
         session.close();
         res.json({message: 'LIKES relationship deleted successfully'});
@@ -571,7 +571,7 @@ app.delete('/deleteDislikes/:nameParam/:dogParam', function(req, res) {
     var dogParam = req.params.dogParam;
 
     session
-    .run('MATCH (a:PERSON {name: $nameParam})-[r:DISLIKES]->(b:DOG {name: $dogParam}) DELETE r', {nameParam: nameParam, dogParam: dogParam})
+    .run('MATCH (a:Person {name: $nameParam})-[r:DISLIKES]->(b:Dog {name: $dogParam}) DELETE r', {nameParam: nameParam, dogParam: dogParam})
     .then(function(result) {
         session.close();
         res.json({message: 'DISLIKES relationship deleted successfully'});
@@ -590,7 +590,7 @@ app.delete('/deleteAssignedTo/:nameParam/:dogParam', function(req, res) {
     var dogParam = req.params.dogParam;
 
     session
-    .run('MATCH (a:DOG {name: $dogParam})-[r:ASSIGNED_TO]->(b:PERSON {name: $nameParam}) DELETE r', {nameParam: nameParam, dogParam: dogParam})
+    .run('MATCH (a:Dog {name: $dogParam})-[r:ASSIGNED_TO]->(b:Person {name: $nameParam}) DELETE r', {nameParam: nameParam, dogParam: dogParam})
     .then(function(result) {
         session.close();
         res.json({message: 'ASSIGNED_TO relationship deleted successfully'});
@@ -609,10 +609,10 @@ app.delete('/deletePersonProperties/:nameParam', function(req, res) {
     var property = req.body.property; // Property to be deleted
 
     session
-    .run('MATCH (n:PERSON {name: $nameParam}) REMOVE n.$property', {nameParam: nameParam, property: property})
+    .run('MATCH (n:Person {name: $nameParam}) REMOVE n.$property', {nameParam: nameParam, property: property})
     .then(function(result) {
         session.close();
-        res.json({message: 'PERSON property deleted successfully'});
+        res.json({message: 'Person property deleted successfully'});
     })
 
     .catch(function(err) {
@@ -628,10 +628,10 @@ app.delete('/deleteDogProperties/:nameParam', function(req, res) {
     var property = req.body.property; // Property to be deleted
 
     session
-    .run('MATCH (n:DOG {name: $nameParam}) REMOVE n.$property', {nameParam: nameParam, property: property})
+    .run('MATCH (n:Dog {name: $nameParam}) REMOVE n.$property', {nameParam: nameParam, property: property})
     .then(function(result) {
         session.close();
-        res.json({message: 'DOG property deleted successfully'});
+        res.json({message: 'Dog property deleted successfully'});
     })
 
     .catch(function(err) {
@@ -648,7 +648,7 @@ app.delete('/deleteAdoptedProperties/:nameParam/:dogParam', function(req, res) {
     var property = req.body.property;
 
     session
-    .run('MATCH (a:PERSON {name: $nameParam})-[r:ADOPTED]->(b:DOG {name: $dogParam}) REMOVE r.$property', {nameParam: nameParam, dogParam: dogParam, property: property})
+    .run('MATCH (a:Person {name: $nameParam})-[r:ADOPTED]->(b:Dog {name: $dogParam}) REMOVE r.$property', {nameParam: nameParam, dogParam: dogParam, property: property})
     .then(function(result) {
         session.close();
         res.json({message: 'ADOPTED property deleted successfully'});
@@ -667,7 +667,7 @@ app.delete('/deleteIsInProperties/:nameParam/:dogParam', function(req, res) {
     var property = req.body.property;
 
     session
-    .run('MATCH (a:SHELTER {name: $nameParam})<-[r:IS_IN]-(b:DOG {name: $dogParam}) REMOVE r.$property', {nameParam: nameParam, dogParam: dogParam, property: property})
+    .run('MATCH (a:Shelter {name: $nameParam})<-[r:IS_IN]-(b:Dog {name: $dogParam}) REMOVE r.$property', {nameParam: nameParam, dogParam: dogParam, property: property})
     .then(function(result) {
         session.close();
         res.json({message: 'IS_IN property deleted successfully'});
@@ -688,7 +688,7 @@ app.get('/dog/:dogParam', function(req, res) {
     var dogParam = req.params.dogParam;
 
     session
-    .run('MATCH (n:DOG {name: $dogParam}) RETURN n', {dogParam: dogParam})
+    .run('MATCH (n:Dog {name: $dogParam}) RETURN n', {dogParam: dogParam})
     .then(function(result) {
         var dog = [];
         result.records.forEach(function(record) {
@@ -714,7 +714,7 @@ app.get('/dog/:dogParam', function(req, res) {
 app.get('/available_dogs', function(req, res) {
     session = driver.session();
     session
-    .run('MATCH (n:DOG) WHERE NOT (:PERSON)-[:ADOPTED]->(n) RETURN n, rand() as r ORDER BY r LIMIT 12')
+    .run('MATCH (n:Dog) WHERE NOT (:Person)-[:ADOPTED]->(n) RETURN n, rand() as r ORDER BY r LIMIT 12')
     .then(function(result) {
         var available_dogs = [];
         result.records.forEach(function(record) {
@@ -740,7 +740,7 @@ app.get('/available_dogs', function(req, res) {
 app.get('/other_users', function(req, res) {
     session = driver.session();
     session
-    .run('MATCH (n:PERSON) RETURN n, rand() as r ORDER BY r LIMIT 12')
+    .run('MATCH (n:Person) RETURN n, rand() as r ORDER BY r LIMIT 12')
     .then(function(result) {
         var other_users = [];
         result.records.forEach(function(record) {
@@ -775,7 +775,7 @@ app.get('/recommend_dogs_race/:nameParam', function(req, res) {
     var nameParam = req.params.nameParam; //User's name
 
     session
-    .run('MATCH (p1:PERSON {name: $nameParam})-[:LIKES]->(d1:DOG)-[:IS_A]->(:RACE)<-[:IS_A]-(d2:DOG) RETURN d2, rand() as r ORDER BY r LIMIT 6', {nameParam: nameParam})
+    .run('MATCH (p1:Person {name: $nameParam})-[:LIKES]->(d1:Dog)-[:IS_A]->(:Race)<-[:IS_A]-(d2:Dog) RETURN d2, rand() as r ORDER BY r LIMIT 6', {nameParam: nameParam})
     .then(function(result) {
         var results = [];
         result.records.forEach(function(record) {
@@ -803,7 +803,7 @@ app.get('/recommend_dogs_age/:nameParam', function(req, res) {
     var nameParam = req.params.nameParam; //User's name
     
     session
-    .run('MATCH (p1:PERSON {name: $nameParam})-[:LIKES]->(d1:DOG) MATCH(d2:DOG) WHERE d2.age = d1.age RETURN d2, rand() as r ORDER BY r LIMIT 6', {nameParam: nameParam})
+    .run('MATCH (p1:Person {name: $nameParam})-[:LIKES]->(d1:Dog) MATCH(d2:Dog) WHERE d2.age = d1.age RETURN d2, rand() as r ORDER BY r LIMIT 6', {nameParam: nameParam})
     .then(function(result) {
         var results = [];
         result.records.forEach(function(record) {
@@ -832,7 +832,7 @@ app.get('/recommend_dogs_location/:nameParam', function(req, res) {
     var nameParam = req.params.nameParam; //User's name
 
     session
-    .run('MATCH (p1:PERSON {name: $nameParam})-[:LIKES]->(d1:DOG)-[:IS_IN]->(l1:SHELTER) MATCH(d2:DOG)-[:IS_IN]->(l2:SHELTER) WHERE l1.name = l2.name RETURN d2, rand() as r ORDER BY r LIMIT 6', {nameParam: nameParam})
+    .run('MATCH (p1:Person {name: $nameParam})-[:LIKES]->(d1:Dog)-[:IS_IN]->(l1:Shelter) MATCH(d2:Dog)-[:IS_IN]->(l2:Shelter) WHERE l1.name = l2.name RETURN d2, rand() as r ORDER BY r LIMIT 6', {nameParam: nameParam})
     .then(function(result) {
         var results = [];
         result.records.forEach(function(record) {
@@ -862,7 +862,7 @@ app.get('/recommend_dogs_size/:nameParam', function(req, res) {
     var nameParam = req.params.nameParam; //User's name
     
     session
-    .run('MATCH (p1:PERSON {name: $nameParam})-[:LIKES]->(d1:DOG)-[:IS_A]->(r1:RACE) MATCH(d2:DOG)-[:IS_A]->(r2:RACE) WHERE r1.size = r2.size RETURN d2, rand() as r ORDER BY r LIMIT 6', {nameParam: nameParam})
+    .run('MATCH (p1:Person {name: $nameParam})-[:LIKES]->(d1:Dog)-[:IS_A]->(r1:Race) MATCH(d2:Dog)-[:IS_A]->(r2:Race) WHERE r1.size = r2.size RETURN d2, rand() as r ORDER BY r LIMIT 6', {nameParam: nameParam})
     .then(function(result) {
         var results = [];
         result.records.forEach(function(record) {
