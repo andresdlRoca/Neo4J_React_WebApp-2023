@@ -3,8 +3,12 @@ import CardGroup from 'react-bootstrap/CardGroup';
 import Card from 'react-bootstrap/Card';
 import Row from 'react-bootstrap/Row';
 import React, { useEffect, useState } from 'react';
+import LikeButton from '../components/LikeButton';
+import UnlikeButton from '../components/UnlikeButton';
+
 function AvailablePets() {
 
+  const user_name = 'User3';
   const [pet_data, setPetData] = useState([]);
 
   useEffect(() => {
@@ -36,6 +40,8 @@ function AvailablePets() {
                 <Card.Body>
                     <Card.Title>My name is {dog.name}!</Card.Title>
                     <Card.Text>I'm {typeof dog.age === 'object' ? dog.age.low : dog.age} years old</Card.Text>
+                    <LikeButton user_name={user_name} dog_name={dog.name}></LikeButton>
+                    <UnlikeButton user_name={user_name} dog_name={dog.name}></UnlikeButton>
                 </Card.Body>
               </Card>
             </CardGroup>
