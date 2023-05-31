@@ -3,6 +3,7 @@ import RegisterPet from "./pages/RegisterPet";
 import MainPage from "./pages/MainPage";
 import AvailablePets from "./pages/AvailablePets";
 import OtherOwners from "./pages/OtherOwners";
+import RecommendDog from "./pages/RecommendDog";
 import Recomendation from "./pages/Recomendation";
 import CheckPets from "./pages/CheckPets";
 import RegisterRace from "./pages/RegisterRace";
@@ -18,7 +19,7 @@ function App() {
       <AppBar />
       <Container className="mt-3 mb-3">
         <Routes>
-          <Route path="/" element={<MainPage />} />
+          <Route path="/" element={<MainPage />} /> {/* MainPage */}
           <Route path="/person/add_user" element={<Register />} />
           <Route path="/dog/add" element={<RegisterPet />} />
           <Route path="/race/add" element={<AvailablePets />} />
@@ -26,9 +27,9 @@ function App() {
           <Route path="/update_info/" element={<OtherOwners />}/>
           <Route path="/delete_info/" element={<OtherOwners />} />
           <Route path="/search_dog/" element={<OtherOwners />} />
-          <Route path="/available_dogs" element={<OtherOwners />} />
+          <Route path="/available_dogs" element={<AvailablePets />} />
           <Route path="/other_users" element={<OtherOwners />} />
-          <Route path="/recommend_dogs" element={<OtherOwners />} />
+          <Route path="/recommend_dogs" element={<RecommendDog />} />
         </Routes>
       </Container>
     </>

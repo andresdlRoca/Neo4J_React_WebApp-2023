@@ -17,6 +17,11 @@ app.use(logger('dev')); // Log requests to console
 app.use(bodyParser.json()); // Parse incoming requests data
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public'))); // Set public folder
+app.use((req, res, next) => {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Headers', '*'); // Origin, X-Requested-With, Content-Type, Accept
+    next();
+});
 
 const neo4j_user = process.env.NEO4J_USER;
 const neo4j_pass = process.env.NEO4J_PASS;
@@ -708,7 +713,7 @@ app.get('/dog/:dogParam', function(req, res) {
 app.get('/available_dogs', function(req, res) {
     session = driver.session();
     session
-    .run('MATCH (n:DOG) WHERE NOT (:PERSON)-[:ADOPTED]->(n) RETURN n')
+    .run('MATCH (n:DOG) WHERE NOT (:PERSON)-[:ADOPTED]->(n) RETURN n, rand() as r ORDER BY r LIMIT 12')
     .then(function(result) {
         var available_dogs = [];
         result.records.forEach(function(record) {
@@ -734,7 +739,7 @@ app.get('/available_dogs', function(req, res) {
 app.get('/other_users', function(req, res) {
     session = driver.session();
     session
-    .run('MATCH (n:PERSON) RETURN n')
+    .run('MATCH (n:PERSON) RETURN n, rand() as r ORDER BY r LIMIT 12')
     .then(function(result) {
         var other_users = [];
         result.records.forEach(function(record) {
@@ -764,12 +769,12 @@ Recommending Dogs Section
 */
 
 //Recommends dogs based on user's preferences on race
-app.get('/recommend_dogs/:nameParam', function(req, res) {
+app.get('/recommend_dogs_race/:nameParam', function(req, res) {
     session = driver.session();
     var nameParam = req.params.nameParam; //User's name
 
     session
-    .run('MATCH (p1:PERSON {name: $nameParam})-[:LIKES]->(d1:DOG)-[:IS_A]->(:RACE)<-[:IS_A]-(d2:DOG) RETURN d2, rand() as r ORDER BY r LIMIT 5', {nameParam: nameParam})
+    .run('MATCH (p1:PERSON {name: $nameParam})-[:LIKES]->(d1:DOG)-[:IS_A]->(:RACE)<-[:IS_A]-(d2:DOG) RETURN d2, rand() as r ORDER BY r LIMIT 6', {nameParam: nameParam})
     .then(function(result) {
         var results = [];
         result.records.forEach(function(record) {
@@ -797,7 +802,7 @@ app.get('/recommend_dogs_age/:nameParam', function(req, res) {
     var nameParam = req.params.nameParam; //User's name
     
     session
-    .run('MATCH (p1:PERSON {name: $nameParam})-[:LIKES]->(d1:DOG) MATCH(d2:DOG) WHERE d2.age = d1.age RETURN d2, rand() as r ORDER BY r LIMIT 5', {nameParam: nameParam})
+    .run('MATCH (p1:PERSON {name: $nameParam})-[:LIKES]->(d1:DOG) MATCH(d2:DOG) WHERE d2.age = d1.age RETURN d2, rand() as r ORDER BY r LIMIT 6', {nameParam: nameParam})
     .then(function(result) {
         var results = [];
         result.records.forEach(function(record) {
@@ -826,7 +831,7 @@ app.get('/recommend_dogs_location/:nameParam', function(req, res) {
     var nameParam = req.params.nameParam; //User's name
 
     session
-    .run('MATCH (p1:PERSON {name: $nameParam})-[:LIKES]->(d1:DOG)-[:IS_IN]->(l1:SHELTER) MATCH(d2:DOG)-[:IS_IN]->(l2:SHELTER) WHERE l1.name = l2.name RETURN d2, rand() as r ORDER BY r LIMIT 5', {nameParam: nameParam})
+    .run('MATCH (p1:PERSON {name: $nameParam})-[:LIKES]->(d1:DOG)-[:IS_IN]->(l1:SHELTER) MATCH(d2:DOG)-[:IS_IN]->(l2:SHELTER) WHERE l1.name = l2.name RETURN d2, rand() as r ORDER BY r LIMIT 6', {nameParam: nameParam})
     .then(function(result) {
         var results = [];
         result.records.forEach(function(record) {
@@ -856,7 +861,7 @@ app.get('/recommend_dogs_size/:nameParam', function(req, res) {
     var nameParam = req.params.nameParam; //User's name
     
     session
-    .run('MATCH (p1:PERSON {name: $nameParam})-[:LIKES]->(d1:DOG)-[:IS_A]->(r1:RACE) MATCH(d2:DOG)-[:IS_A]->(r2:RACE) WHERE r1.size = r2.size RETURN d2, rand() as r ORDER BY r LIMIT 5', {nameParam: nameParam})
+    .run('MATCH (p1:PERSON {name: $nameParam})-[:LIKES]->(d1:DOG)-[:IS_A]->(r1:RACE) MATCH(d2:DOG)-[:IS_A]->(r2:RACE) WHERE r1.size = r2.size RETURN d2, rand() as r ORDER BY r LIMIT 6', {nameParam: nameParam})
     .then(function(result) {
         var results = [];
         result.records.forEach(function(record) {
@@ -879,7 +884,8 @@ app.get('/recommend_dogs_size/:nameParam', function(req, res) {
 });
 
 
-app.listen(3000); // Start server
-console.log("Server started on port 3000");
+port = process.env.PORT || 4000;
+app.listen(port); // Start server
+console.log("Server started on port " + port);
 
 module.exports = app;
