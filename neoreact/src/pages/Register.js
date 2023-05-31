@@ -10,20 +10,14 @@ function Register() {
 
   const handleSubmit = (event) => {
     const form = event.currentTarget;
-    if (validated === false) {
+    if (validated !== false) {
       event.preventDefault();
       event.stopPropagation();
 
       let org = JSON.stringify({
-        nombre: nombre,
-        passw: passw,
-        correo: correo,
-        correoA: correoA,
-        username: username,
-        telefono: telefono,
-        imagen: imagen,
+        nombre: "hola",
       });
-      fetch("http://localhost:8080/registrar-organizaciones", {
+      fetch("http://localhost:3000/", {
         method: "POST",
         mode: "cors",
         body: org,
@@ -35,17 +29,9 @@ function Register() {
         .then((res) => res.json())
         .then((data) => {
           if (data.msg === "El producto fue registrado con exito") {
-            Swal.fire({
-              icon: "success",
-              title: "Registro completado",
-              text: data.msg,
-            });
+            console.log("exito");
           } else {
-            Swal.fire({
-              icon: "warning",
-              title: "Hubo un error",
-              text: data.msg,
-            });
+            console.log("fallo");
           }
         });
     }
