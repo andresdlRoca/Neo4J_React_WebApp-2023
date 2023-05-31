@@ -90,5 +90,3 @@ fs.createReadStream(csvFilePath)
       driver.close();
     }
   });
-
-// ...

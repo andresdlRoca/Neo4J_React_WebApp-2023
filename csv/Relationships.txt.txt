@@ -1,5 +1,4 @@
 //Attending to Relationship Person-Volunteer to Person-User
-
 MATCH (p1:Person:Volunteer {name: "William Martin"}), (d1:Person:User {name: "John Doe"})
 CREATE (p1)-[:ATTENDING]->(d1);
 
@@ -32,8 +31,10 @@ CREATE (p10)-[:ATTENDING]->(d10);
 
 
 
-//Assigned To Person-Volunteer to Dog
 
+
+
+//Assigned To Person-Volunteer to Dog
 MATCH (p1:Person:Volunteer {name: "William Martin"}), (d1:Dog {name: "Buddy"})
 CREATE (p1)-[:ASSIGNED_TO]->(d1);
 
@@ -78,3 +79,253 @@ CREATE (p14)-[:ASSIGNED_TO]->(d14);
 
 MATCH (p15:Person:Volunteer {name: "Olivia Thompson"}), (d15:Dog {name: "Rocky"})
 CREATE (p15)-[:ASSIGNED_TO]->(d15);
+
+
+
+
+
+
+//Rescued By Dog to Person-Volunteer
+MATCH (p1:Dog {name: "Buddy"}), (d1:Person:Volunteer {name: "Charlotte King"})
+CREATE (p1)-[:RESCUED_BY]->(d1);
+
+MATCH (p2:Dog {name: "Max"}), (d2:Person:Volunteer {name: "Christopher Harris"})
+CREATE (p2)-[:RESCUED_BY]->(d2);
+
+MATCH (p3:Dog {name: "Charlie"}), (d3:Person:Volunteer {name: "Mia Turner"})
+CREATE (p3)-[:RESCUED_BY]->(d3);
+
+MATCH (p4:Dog {name: "Cooper"}), (d4:Person:Volunteer {name: "Joseph Lewis"})
+CREATE (p4)-[:RESCUED_BY]->(d4);
+
+MATCH (p5:Dog {name: "Lucy"}), (d5:Person:Volunteer {name: "Ava Hall"})
+CREATE (p5)-[:RESCUED_BY]->(d5);
+
+MATCH (p6:Dog {name: "Bailey"}), (d6:Person:Volunteer {name: "Daniel White"})
+CREATE (p6)-[:RESCUED_BY]->(d6);
+
+MATCH (p7:Dog {name: "Daisy"}), (d7:Person:Volunteer {name: "Sophia Walker"})
+CREATE (p7)-[:RESCUED_BY]->(d7);
+
+MATCH (p8:Dog {name: "Rocky"}), (d8:Person:Volunteer {name: "James Lee"})
+CREATE (p8)-[:RESCUED_BY]->(d8);
+
+MATCH (p9:Dog {name: "Sadie"}), (d9:Person:Volunteer {name: "Olivia Thompson"})
+CREATE (p9)-[:RESCUED_BY]->(d9);
+
+MATCH (p10:Dog {name: "Molly"}), (d10:Person:Volunteer {name: "William Martin"})
+CREATE (p10)-[:RESCUED_BY]->(d10);
+
+MATCH (p11:Dog {name: "Lola"}), (d11:Person:Volunteer {name: "Joseph Lewis"})
+CREATE (p11)-[:RESCUED_BY]->(d11);
+
+MATCH (p12:Dog {name: "Tucker"}), (d12:Person:Volunteer {name: "Mia Turner"})
+CREATE (p12)-[:RESCUED_BY]->(d12);
+
+MATCH (p13:Dog {name: "Zoe"}), (d13:Person:Volunteer {name: "Christopher Harris"})
+CREATE (p13)-[:RESCUED_BY]->(d13);
+
+MATCH (p14:Dog {name: "Bear"}), (d14:Person:Volunteer {name: "William Martin"})
+CREATE (p14)-[:RESCUED_BY]->(d14);
+
+MATCH (p15:Dog {name: "Milo"}), (d15:Person:Volunteer {name: "Ava Hall"})
+CREATE (p15)-[:RESCUED_BY]->(d15);
+
+
+
+
+
+
+//IS_A Dog to Race 
+MATCH (p1:Dog {name: "Buddy"}), (d1:Race {name: "Bulldog"})
+CREATE (p1)-[:IS_A]->(d1);
+
+MATCH (p2:Dog {name: "Max"}), (d2:Race {name: "Rottweiler"})
+CREATE (p2)-[:IS_A]->(d2);
+
+MATCH (p3:Dog {name: "Charlie"}), (d3:Race {name: "German Shepherd"})
+CREATE (p3)-[:IS_A]->(d3);
+
+MATCH (p4:Dog {name: "Cooper"}), (d4:Race {name: "Boxer"})
+CREATE (p4)-[:IS_A]->(d4);
+
+MATCH (p5:Dog {name: "Lucy"}), (d5:Race {name: "Dalmatian"})
+CREATE (p5)-[:IS_A]->(d5);
+
+MATCH (p6:Dog {name: "Bailey"}), (d6:Race {name: "Labrador Retriever"})
+CREATE (p6)-[:IS_A]->(d6);
+
+MATCH (p7:Dog {name: "Daisy"}), (d7:Race {name: "Golden Retriever"})
+CREATE (p7)-[:IS_A]->(d7);
+
+MATCH (p8:Dog {name: "Rocky"}), (d8:Race {name: "Beagle"})
+CREATE (p8)-[:IS_A]->(d8);
+
+MATCH (p9:Dog {name: "Sadie"}), (d9:Race {name: "Dachshund"})
+CREATE (p9)-[:IS_A]->(d9);
+
+MATCH (p10:Dog {name: "Molly"}), (d10:Race {name: "Siberian Husky"})
+CREATE (p10)-[:IS_A]->(d10);
+
+MATCH (p11:Dog {name: "Lola"}), (d11:Race {name: "Yorkshire Terrier"})
+CREATE (p11)-[:IS_A]->(d11);
+
+MATCH (p12:Dog {name: "Tucker"}), (d12:Race {name: "Shih Tzu"})
+CREATE (p12)-[:IS_A]->(d12);
+
+MATCH (p13:Dog {name: "Zoe"}), (d13:Race {name: "Poodle"})
+CREATE (p13)-[:IS_A]->(d13);
+
+MATCH (p14:Dog {name: "Bear"}), (d14:Race {name: "Chihuahua"})
+CREATE (p14)-[:IS_A]->(d14);
+
+MATCH (p15:Dog {name: "Milo"}), (d15:Race {name: "Golden Retriever"})
+CREATE (p15)-[:IS_A]->(d15);
+
+
+
+
+//Assigned to Person-Vet to Dog
+MATCH (p1:Person:Vet {name: "Andrew Green"}), (d1:Dog {name: "Buddy"})
+CREATE (p1)-[:ASSIGNED_TO]->(d1);
+
+MATCH (p2:Person:Vet {name: "Elizabeth Adams"}), (d2:Dog {name: "Max"})
+CREATE (p2)-[:ASSIGNED_TO]->(d2);
+
+MATCH (p3:Person:Vet {name: "Benjamin Taylor"}), (d3:Dog {name: "Charlie"})
+CREATE (p3)-[:ASSIGNED_TO]->(d3);
+
+MATCH (p4:Person:Vet {name: "Ella Wilson"}), (d4:Dog {name: "Cooper"})
+CREATE (p4)-[:ASSIGNED_TO]->(d4);
+
+MATCH (p5:Person:Vet {name: "Ryan Anderson"}), (d5:Dog {name: "Lucy"})
+CREATE (p5)-[:ASSIGNED_TO]->(d5);
+
+MATCH (p6:Person:Vet {name: "Grace Clark"}), (d6:Dog {name: "Bailey"})
+CREATE (p6)-[:ASSIGNED_TO]->(d6);
+
+MATCH (p7:Person:Vet {name: "Jacob Thompson"}), (d7:Dog {name: "Daisy"})
+CREATE (p7)-[:ASSIGNED_TO]->(d7);
+
+MATCH (p8:Person:Vet {name: "Samuel Turner"}), (d8:Dog {name: "Sadie"})
+CREATE (p8)-[:ASSIGNED_TO]->(d8);
+
+MATCH (p9:Person:Vet {name: "Abigail Harris"}), (d9:Dog {name: "Molly"})
+CREATE (p9)-[:ASSIGNED_TO]->(d9);
+
+MATCH (p10:Person:Vet {name: "Elizabeth Adams"}), (d10:Dog {name: "Lola"})
+CREATE (p10)-[:ASSIGNED_TO]->(d10);
+
+MATCH (p11:Person:Vet {name: "Andrew Green"}), (d11:Dog {name: "Tucker"})
+CREATE (p11)-[:ASSIGNED_TO]->(d11);
+
+MATCH (p12:Person:Vet {name: "Benjamin Taylor"}), (d12:Dog {name: "Zoe"})
+CREATE (p12)-[:ASSIGNED_TO]->(d12);
+
+MATCH (p13:Person:Vet {name: "Ella Wilson"}), (d13:Dog {name: "Bear"})
+CREATE (p13)-[:ASSIGNED_TO]->(d13);
+
+MATCH (p14:Person:Vet {name: "Ryan Anderson"}), (d14:Dog {name: "Milo"})
+CREATE (p14)-[:ASSIGNED_TO]->(d14);
+
+MATCH (p15:Person:Vet {name: "Lily Martin"}), (d15:Dog {name: "Rocky"})
+CREATE (p15)-[:ASSIGNED_TO]->(d15);
+
+
+
+
+
+//Transferrd_From Dog to Shelter
+MATCH (p1:Dog {name: "Buddy"}), (d1:Shelter {name: "Happy Paws Shelter"})
+CREATE (p1)-[:TRANSFERRED_FROM  {since: date("2021-01-28")}]->(d1);
+
+MATCH (p2:Dog {name: "Max"}), (d2:Shelter {name: "Happy Paws Shelter"})
+CREATE (p2)-[:TRANSFERRED_FROM  {since: date("2021-03-28")}]->(d2);
+
+MATCH (p3:Dog {name: "Charlie"}), (d3:Shelter {name: "Happy Paws Shelter"})
+CREATE (p3)-[:TRANSFERRED_FROM  {since: date("2021-05-14")}]->(d3);
+
+MATCH (p4:Dog {name: "Cooper"}), (d4:Shelter {name: "Pawsome Haven"})
+CREATE (p4)-[:TRANSFERRED_FROM  {since: date("2021-07-28")}]->(d4);
+
+MATCH (p5:Dog {name: "Lucy"}), (d5:Shelter {name: "Pawsome Haven"})
+CREATE (p5)-[:TRANSFERRED_FROM  {since: date("2021-03-24")}]->(d5);
+
+MATCH (p6:Dog {name: "Bailey"}), (d6:Shelter {name: "Pawsome Haven"})
+CREATE (p6)-[:TRANSFERRED_FROM  {since: date("2021-05-17")}]->(d6);
+
+MATCH (p7:Dog {name: "Daisy"}), (d7:Shelter {name: "Safe Haven Shelter"})
+CREATE (p7)-[:TRANSFERRED_FROM  {since: date("2021-06-25")}]->(d7);
+
+MATCH (p8:Dog {name: "Rocky"}), (d8:Shelter {name: "Safe Haven Shelter"})
+CREATE (p8)-[:TRANSFERRED_FROM  {since: date("2021-02-05")}]->(d8);
+
+MATCH (p9:Dog {name: "Sadie"}), (d9:Shelter {name: "Safe Haven Shelter"})
+CREATE (p9)-[:TRANSFERRED_FROM  {since: date("2021-01-27")}]->(d9);
+
+MATCH (p10:Dog {name: "Molly"}), (d10:Shelter {name: "Forever Friends Shelter"})
+CREATE (p10)-[:TRANSFERRED_FROM  {since: date("2021-08-02")}]->(d10);
+
+MATCH (p11:Dog {name: "Lola"}), (d11:Shelter {name: "Forever Friends Shelter"})
+CREATE (p11)-[:TRANSFERRED_FROM  {since: date("2021-12-08")}]->(d11);
+
+MATCH (p12:Dog {name: "Tucker"}), (d12:Shelter {name: "Forever Friends Shelter"})
+CREATE (p12)-[:TRANSFERRED_FROM  {since: date("2021-01-09")}]->(d12);
+
+MATCH (p13:Dog {name: "Zoe"}), (d13:Shelter {name: "Furry Tales Shelter"})
+CREATE (p13)-[:TRANSFERRED_FROM  {since: date("2021-09-28")}]->(d13);
+
+MATCH (p14:Dog {name: "Bear"}), (d14:Shelter {name: "Furry Tales Shelter"})
+CREATE (p14)-[:TRANSFERRED_FROM  {since: date("2021-01-18")}]->(d14);
+
+MATCH (p15:Dog {name: "Milo"}), (d15:Shelter {name: "Furry Tales Shelter"})
+CREATE (p15)-[:TRANSFERRED_FROM  {since: date("2021-03-22")}]->(d15);
+
+
+
+
+//IS_IN Dog to Shelter
+MATCH (p1:Dog {name: "Buddy"}), (d1:Shelter {name: "Happy Paws Shelter"})
+CREATE (p1)-[:IS_IN  {since: date("2021-02-28"), origin: "Mixco", staff_ratio: 1}]->(d1);
+
+MATCH (p2:Dog {name: "Max"}), (d2:Shelter {name: "Happy Paws Shelter"})
+CREATE (p2)-[:IS_IN  {since: date("2021-04-28"), origin: "Mixco", staff_ratio: 1}]->(d2);
+
+MATCH (p3:Dog {name: "Charlie"}), (d3:Shelter {name: "Happy Paws Shelter"})
+CREATE (p3)-[:IS_IN  {since: date("2021-06-14"), origin: "Mixco", staff_ratio: 1}]->(d3);
+
+MATCH (p4:Dog {name: "Cooper"}), (d4:Shelter {name: "Pawsome Haven"})
+CREATE (p4)-[:IS_IN  {since: date("2021-08-28"), origin: "Chinautla", staff_ratio: 1}]->(d4);
+
+MATCH (p5:Dog {name: "Lucy"}), (d5:Shelter {name: "Pawsome Haven"})
+CREATE (p5)-[:IS_IN  {since: date("2021-03-28"), origin: "Chinautla", staff_ratio: 1}]->(d5);
+
+MATCH (p6:Dog {name: "Bailey"}), (d6:Shelter {name: "Pawsome Haven"})
+CREATE (p6)-[:IS_IN  {since: date("2021-07-17"), origin: "Chinautla", staff_ratio: 1}]->(d6);
+
+MATCH (p7:Dog {name: "Daisy"}), (d7:Shelter {name: "Safe Haven Shelter"})
+CREATE (p7)-[:IS_IN  {since: date("2022-04-25"), origin: "Amatitlan", staff_ratio: 1}]->(d7);
+
+MATCH (p8:Dog {name: "Rocky"}), (d8:Shelter {name: "Safe Haven Shelter"})
+CREATE (p8)-[:IS_IN  {since: date("2022-02-05"), origin: "Amatitlan", staff_ratio: 1}]->(d8);
+
+MATCH (p9:Dog {name: "Sadie"}), (d9:Shelter {name: "Safe Haven Shelter"})
+CREATE (p9)-[:IS_IN  {since: date("2021-02-27"), origin: "Amatitlan", staff_ratio: 1}]->(d9);
+
+MATCH (p10:Dog {name: "Molly"}), (d10:Shelter {name: "Forever Friends Shelter"})
+CREATE (p10)-[:IS_IN  {since: date("2022-01-02"), origin: "Villa Nueva", staff_ratio: 1}]->(d10);
+
+MATCH (p11:Dog {name: "Lola"}), (d11:Shelter {name: "Forever Friends Shelter"})
+CREATE (p11)-[:IS_IN  {since: date("2022-12-08"), origin: "Villa Nueva", staff_ratio: 1}]->(d11);
+
+MATCH (p12:Dog {name: "Tucker"}), (d12:Shelter {name: "Forever Friends Shelter"})
+CREATE (p12)-[:IS_IN  {since: date("2021-01-27"), origin: "Villa Nueva", staff_ratio: 1}]->(d12);
+
+MATCH (p13:Dog {name: "Zoe"}), (d13:Shelter {name: "Furry Tales Shelter"})
+CREATE (p13)-[:IS_IN  {since: date("2021-12-28"), origin: "Quetzaltenango", staff_ratio: 1}]->(d13);
+
+MATCH (p14:Dog {name: "Bear"}), (d14:Shelter {name: "Furry Tales Shelter"})
+CREATE (p14)-[:IS_IN  {since: date("2022-01-18"), origin: "Quetzaltenango", staff_ratio: 1}]->(d14);
+
+MATCH (p15:Dog {name: "Milo"}), (d15:Shelter {name: "Furry Tales Shelter"})
+CREATE (p15)-[:IS_IN  {since: date("2021-09-22"), origin: "Quetzaltenango", staff_ratio: 1}]->(d15);
