@@ -10,11 +10,45 @@ function Register() {
 
   const handleSubmit = (event) => {
     const form = event.currentTarget;
-    if (form.checkValidity() === false) {
+    if (validated === false) {
       event.preventDefault();
       event.stopPropagation();
-    }
 
+      let org = JSON.stringify({
+        nombre: nombre,
+        passw: passw,
+        correo: correo,
+        correoA: correoA,
+        username: username,
+        telefono: telefono,
+        imagen: imagen,
+      });
+      fetch("http://localhost:8080/registrar-organizaciones", {
+        method: "POST",
+        mode: "cors",
+        body: org,
+        headers: {
+          "Content-Type": "application/json",
+        },
+        referrerPolicy: "no-referrer",
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.msg === "El producto fue registrado con exito") {
+            Swal.fire({
+              icon: "success",
+              title: "Registro completado",
+              text: data.msg,
+            });
+          } else {
+            Swal.fire({
+              icon: "warning",
+              title: "Hubo un error",
+              text: data.msg,
+            });
+          }
+        });
+    }
     setValidated(true);
   };
 
