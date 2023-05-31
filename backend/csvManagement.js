@@ -5,7 +5,7 @@ const csv = require('csv-parser');
 // Neo4j connection details
 const uri = 'bolt://127.0.0.1:7687';
 const username = 'neo4j';
-const password = 'password';
+const password = 'basesdedatos2'; // or password
 
 // CSV file path
 const path = require('path');
