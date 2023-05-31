@@ -7,6 +7,7 @@ import Row from "react-bootstrap/Row";
 
 function Register() {
   const [validated, setValidated] = useState(false);
+  const [email, setEmail] = useState("");
 
   const handleSubmit = (event) => {
     const form = event.currentTarget;
@@ -16,6 +17,7 @@ function Register() {
 
       let org = JSON.stringify({
         nombre: "hola",
+        email: email,
       });
       fetch("http://localhost:3000/", {
         method: "POST",
@@ -68,6 +70,9 @@ function Register() {
             placeholder="email"
             aria-describedby="inputGroupPrepend"
             required
+            onChange={(event) => {
+              setEmail(event.target.value);
+            }}
           />
           <Form.Control.Feedback type="invalid">
             Please choose a email.
