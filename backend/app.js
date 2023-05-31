@@ -81,7 +81,9 @@ app.post('/dog/add', function(req, res) {
     var vaccines = req.body.vaccines;
 
     session
-    .run('CREATE (:Dog {name: $nameBody, age: $ageBody, rescue_date: '+ rescue_date +', vaccines: '+vaccines+', adopted: $adoptedBody, neutered: $neuteredBody})', {nameBody: name, adoptedBody: adopted, ageBody: age, neuteredBody: neutered, rescue_dateBody: rescue_date, vaccinesBody: vaccines})
+    .run('CREATE (:Dog {name: $nameBody, age: $ageBody, rescue_date: "'+ rescue_date +'", vaccines: [' + vaccines.map(vaccine => "'" + vaccine + "'").join(',') + '], adopted: $adoptedBody, neutered: $neuteredBody})', {nameBody: name, adoptedBody: adopted, ageBody: age, neuteredBody: neutered, rescue_dateBody: rescue_date, vaccinesBody: vaccines})
+
+
     .then(function(result) {
         session.close();
         res.json({message: 'Dog added successfully'});
@@ -95,17 +97,17 @@ app.post('/dog/add', function(req, res) {
 
 app.post('/race/add', function(req, res) {
     session = driver.session();
-    var race_name = res.body.race_name;
-    var avg_lifespan = parseInt(res.body.avg_lifespan);
-    var energetic = res.body.energetic;
+    var race_name = req.body.race_name;
+    var avg_lifespan = parseInt(req.body.avg_lifespan);
+    var energetic = req.body.energetic;
     energetic = energetic === "true";
-    var family_friendly = res.body.family_friendly;
+    var family_friendly = req.body.family_friendly;
     family_friendly = family_friendly === "true";
-    var hypoallergenic = res.body.hypoallergenic;
+    var hypoallergenic = req.body.hypoallergenic;
     hypoallergenic = hypoallergenic === "true";
-    var sheds = res.body.sheds;
+    var sheds = req.body.sheds;
     sheds = sheds === "true";
-    var size = res.body.size;
+    var size = req.body.size;
 
     session
     .run('CREATE (:Race {race_name: $race_nameBody, sheds: $shedsBody, energetic: $energeticBody, hypoallergenic: $hypoallergenicBody, family_friendly: $family_friendlyBody, size: $sizeBody, avg_lifespan: $avg_lifespanBody})', {race_nameBody: race_name, avg_lifespanBody: avg_lifespan, energeticBody: energetic, family_friendlyBody: family_friendly, hypoallergenicBody: hypoallergenic, shedsBody: sheds, sizeBody: size})
@@ -124,11 +126,11 @@ app.post('/shelter/add', function(req, res) {
     session = driver.session();
     var name = req.body.name;
     var location = req.body.location;
-    var foundation_date = req.body.foundation_data;
+    var foundation_date = req.body.foundation_date;
     var volunteers = parseInt(req.body.volunteers);
 
     session
-    .run('CREATE (:Shelter {name: $nameBody, location: $locationBody, volunteers: $volunteerBody, foundation_date: '+foundation_date+'})', {nameBody: name, locationBody: location, volunteersBody: volunteers})
+    .run('CREATE (:Shelter {name: $nameBody, location: $locationBody, volunteers: $volunteerBody, foundation_date: $foundation_dateBody})', { nameBody: name, locationBody: location, volunteerBody: volunteers, foundation_dateBody: foundation_date })
     .then(function(result) {
         session.close();
         res.json({message: 'Shelter added successfully'});
@@ -288,14 +290,20 @@ Updating Nodes Section
 */
 
 // Update Person information
-app.put('/person/:nameParam', function(req, res) {
+app.post('/person/update_user', function(req, res) {
     session = driver.session();
-    var nameParam = req.params.nameParam;
-    var new_age = parseInt(req.body.new_age);
-    var new_email = req.body.new_email;
-    
+    var name = req.body.name;
+    var type_user = req.body.type_user; //Volunteer, User, Vet
+    var age = parseInt(req.body.age);
+    var allergic = req.body.allergic;
+    var has_family = req.body.has_family;
+    var has_pets = req.body.has_pets;
+    var email = req.body.email;
+    var sedentary = req.body.sedentary;
+
     session
-    .run('MATCH (n:Person {name: $nameParam}) SET n.age = $new_ageBody, n.email = $new_emailBody', {nameParam: nameParam, new_nameBody: new_name, new_ageBody: new_age, new_emailBody: new_email})
+    session
+    .run('MATCH (p:Person {name: $name}) SET p.type_user = $type_user, p.age = $age, p.allergic = $allergic, p.has_family = $has_family, p.has_pets = $has_pets, p.email = $email, p.sedentary = $sedentary', { name: name, type_user: type_user, age: age, allergic: allergic, has_family: has_family, has_pets: has_pets, email: email, sedentary: sedentary })
     .then(function(result) {
         session.close();
         res.json({message: 'Person updated successfully'});
