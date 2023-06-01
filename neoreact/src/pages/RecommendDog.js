@@ -6,7 +6,7 @@ import React, { useEffect, useState } from 'react';
 
 
 function RecommendDog() {
-    var user_name = 'User3';
+    const user_name = 'Grace Clark';
     const [recommendation_by_race, setRecommendationByRace] = useState([]);
     const [recommendation_by_age, setRecommendationByAge] = useState([]);
     const [recommendation_by_size, setRecommendationBySize] = useState([]);

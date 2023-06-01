@@ -8,7 +8,7 @@ import UnlikeButton from '../components/UnlikeButton';
 
 function AvailablePets() {
 
-  const user_name = 'User3';
+  const user_name = 'Lily Martin';
   const [pet_data, setPetData] = useState([]);
 
   useEffect(() => {

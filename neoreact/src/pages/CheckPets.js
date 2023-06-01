@@ -19,10 +19,11 @@ function CheckPets() {
   const handleShow = () => setShow(true);
 
   const handleSubmit = (event) => {
+    event.preventDefault();
+    event.stopPropagation();
     const form = event.currentTarget;
     if (form.checkValidity() === false) {
-      event.preventDefault();
-      event.stopPropagation();
+      
 
       const fetchData = async () => {
         try {
@@ -47,25 +48,28 @@ function CheckPets() {
     !found ? setFound(true) : setFound(false);
   };
 
-  const handleAdopt = async () => {
-    let body = {
-      type_relationship: "ADOPTED",
-    };
-    fetch(`http://localhost:4000/person/${user_name}/dog/${dog_name}`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(body),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log("Success:", data);
-      })
-      .catch((error) => {
-        console.error("Error:", error);
-      });
+  const body = {
+    type_relationship: "ADOPTED",
+    adopted_in: "CITY A",
+    since: 'date("2023-06-06")'
   };
+
+  const handleAdopt = async () => {
+    fetch(`http://localhost:4000/person/${user_name}/dog/${dog_name}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(body),
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log('Success:', data);
+    })
+    .catch((error) => {
+        console.error('Error:', error);
+    });
+    }
 
   const handleHide = (event) => {
     setFound(false);
@@ -103,7 +107,7 @@ function CheckPets() {
         <Card style={{ width: "25rem" }}>
           <Card.Img variant="top" src="/nino-feliz-con-su-perro.jpeg" />
           <Card.Body>
-            <Card.Title>Pet name</Card.Title>
+            <Card.Title>{dog_name}</Card.Title>
             <Card.Text>
               Some quick example text to build on the card title and make up the
               bulk of the card's content.
