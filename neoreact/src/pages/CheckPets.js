@@ -141,6 +141,9 @@ function CheckPets() {
               placeholder="Username"
               aria-describedby="inputGroupPrepend"
               required
+              onChange={(event) => {
+                setuser_name(event.target.value);
+              }}
             />
             <Form.Control.Feedback type="invalid">
               Please type your username.
