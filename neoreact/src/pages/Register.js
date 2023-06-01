@@ -33,7 +33,7 @@ function Register() {
 
       console.log(org);
       try {
-        fetch("http://localhost:4000//person/add_user", {
+        fetch("http://localhost:4000/person/add_user", {
           method: "POST",
           mode: "cors",
           body: org,
